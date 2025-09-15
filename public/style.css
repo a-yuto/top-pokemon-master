@@ -1,0 +1,398 @@
+/* Speed Scatter Plot Styles */
+.speed-scatter-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.speed-scatter-container h1 {
+    color: #2c3e50;
+    text-align: center;
+    margin-bottom: 10px;
+    font-size: 2.5rem;
+}
+
+.speed-scatter-container p {
+    text-align: center;
+    color: #7f8c8d;
+    margin-bottom: 30px;
+    font-size: 1.1rem;
+}
+
+.scatter-plot-wrapper {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    min-height: 600px;
+    overflow-x: auto;
+    overflow-y: hidden;
+}
+
+.speed-axis {
+    position: relative;
+    height: 40px;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #e9ecef;
+}
+
+.axis-tick {
+    position: absolute;
+    top: 15px;
+    transform: translateX(-50%);
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: #6c757d;
+    background: white;
+    padding: 2px 6px;
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.axis-tick::before {
+    content: '';
+    position: absolute;
+    top: -17px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 1px;
+    height: 15px;
+    background: #dee2e6;
+}
+
+.scatter-plot {
+    position: relative;
+    min-height: 500px;
+}
+
+.single-row-container {
+    position: relative;
+    display: flex;
+    align-items: stretch;
+    margin-bottom: 20px;
+}
+
+.single-row {
+    position: relative;
+    height: 100px;
+    border-bottom: 1px solid #f1f3f4;
+    padding-bottom: 10px;
+    background: linear-gradient(90deg, rgba(220, 53, 69, 0.05) 0%, rgba(220, 53, 69, 0.02) 100%);
+    min-width: 3000px;
+    flex: 1;
+}
+
+.speed-row {
+    position: relative;
+    height: 100px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #f1f3f4;
+    padding-bottom: 10px;
+}
+
+.speed-row:nth-child(1) {
+    /* 努力値252 性格1.1倍 持ち物1.5倍 - 最上段 */
+    background: linear-gradient(90deg, rgba(111, 66, 193, 0.05) 0%, rgba(111, 66, 193, 0.02) 100%);
+}
+
+.speed-row:nth-child(2) {
+    /* 努力値252 性格1.1倍 - 上から2段目 */
+    background: linear-gradient(90deg, rgba(32, 201, 151, 0.05) 0%, rgba(32, 201, 151, 0.02) 100%);
+}
+
+.speed-row:nth-child(3) {
+    /* 努力値252 - 下から2段目 */
+    background: linear-gradient(90deg, rgba(253, 126, 20, 0.05) 0%, rgba(253, 126, 20, 0.02) 100%);
+}
+
+.speed-row:nth-child(4) {
+    /* 努力値0 - 最下段 */
+    background: linear-gradient(90deg, rgba(220, 53, 69, 0.05) 0%, rgba(220, 53, 69, 0.02) 100%);
+}
+
+.row-label-fixed {
+    position: sticky;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    font-weight: 600;
+    color: #dc3545;
+    font-size: 0.9rem;
+    background: white;
+    padding: 8px 12px;
+    border-radius: 20px;
+    border: 2px solid rgba(220, 53, 69, 0.3);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    white-space: nowrap;
+    min-width: 120px;
+    text-align: center;
+    z-index: 100;
+    height: fit-content;
+    align-self: center;
+    margin-right: 20px;
+}
+
+/* Style for MaxEVWithNatureAndItem row label (first child) */
+.single-row-container:first-child .row-label-fixed {
+    color: #6f42c1;
+    border-color: rgba(111, 66, 193, 0.3);
+}
+
+/* Style for MaxEVWithNature row label (second child) */
+.single-row-container:nth-child(2) .row-label-fixed {
+    color: #0d6efd;
+    border-color: rgba(13, 110, 253, 0.3);
+}
+
+/* Style for MaxEV252 row label (third child) */
+.single-row-container:nth-child(3) .row-label-fixed {
+    color: #fd7e14;
+    border-color: rgba(253, 126, 20, 0.3);
+}
+
+/* Style for BaseEV0 row label (fourth child) */
+.single-row-container:nth-child(4) .row-label-fixed {
+    color: #dc3545;
+    border-color: rgba(220, 53, 69, 0.3);
+}
+
+.row-label {
+    position: absolute;
+    left: -150px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-weight: 600;
+    color: #495057;
+    font-size: 0.9rem;
+    background: white;
+    padding: 8px 12px;
+    border-radius: 20px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    white-space: nowrap;
+    min-width: 120px;
+    text-align: center;
+}
+
+.speed-row:nth-child(1) .row-label {
+    color: #6f42c1;
+    border: 2px solid rgba(111, 66, 193, 0.3);
+}
+
+.speed-row:nth-child(2) .row-label {
+    color: #20c997;
+    border: 2px solid rgba(32, 201, 151, 0.3);
+}
+
+.speed-row:nth-child(3) .row-label {
+    color: #fd7e14;
+    border: 2px solid rgba(253, 126, 20, 0.3);
+}
+
+.speed-row:nth-child(4) .row-label {
+    color: #dc3545;
+    border: 2px solid rgba(220, 53, 69, 0.3);
+}
+
+.row-points {
+    position: relative;
+    height: 100%;
+    padding-left: 20px;
+    padding-right: 20px;
+    min-width: 3000px;
+}
+
+.single-row .pokemon-point {
+    position: absolute;
+    transform-origin: center center;
+    background: white;
+    border: 2px solid #dc3545;
+    color: #dc3545;
+    border-radius: 8px;
+    padding: 4px 6px;
+    font-size: 0.7rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    z-index: 10;
+    white-space: nowrap;
+    width: auto;
+    height: auto;
+    min-width: 70px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+}
+
+.pokemon-name {
+    font-weight: 600;
+    font-size: 0.7rem;
+}
+
+.pokemon-speed {
+    font-weight: 700;
+    font-size: 0.75rem;
+    background: rgba(0,0,0,0.05);
+    padding: 1px 4px;
+    border-radius: 4px;
+}
+
+/* Style for MaxEVWithNatureAndItem row (first child) */
+.single-row-container:first-child .single-row .pokemon-point {
+    border-color: #6f42c1;
+    color: #6f42c1;
+}
+
+/* Style for MaxEVWithNature row (second child) */
+.single-row-container:nth-child(2) .single-row .pokemon-point {
+    border-color: #0d6efd;
+    color: #0d6efd;
+}
+
+/* Style for MaxEV252 row (third child) */
+.single-row-container:nth-child(3) .single-row .pokemon-point {
+    border-color: #fd7e14;
+    color: #fd7e14;
+}
+
+/* Style for BaseEV0 row (fourth child) */
+.single-row-container:nth-child(4) .single-row .pokemon-point {
+    border-color: #dc3545;
+    color: #dc3545;
+}
+
+.single-row .pokemon-point:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    z-index: 20;
+    background: #f8f9fa;
+    border-color: #495057;
+    transform: translateY(-50%) translateX(-50%) scale(1.1) !important;
+}
+
+.pokemon-point {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%) translateX(-50%);
+    background: white;
+    border: 2px solid #dee2e6;
+    border-radius: 8px;
+    padding: 6px 10px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    z-index: 10;
+    white-space: nowrap;
+    max-width: 120px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.pokemon-point:hover {
+    transform: translateY(-50%) translateX(-50%) scale(1.1);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    z-index: 20;
+    background: #f8f9fa;
+    border-color: #495057;
+}
+
+.speed-row:nth-child(1) .pokemon-point {
+    border-color: #6f42c1;
+    color: #6f42c1;
+}
+
+.speed-row:nth-child(2) .pokemon-point {
+    border-color: #20c997;
+    color: #20c997;
+}
+
+.speed-row:nth-child(3) .pokemon-point {
+    border-color: #fd7e14;
+    color: #fd7e14;
+}
+
+.speed-row:nth-child(4) .pokemon-point {
+    border-color: #dc3545;
+    color: #dc3545;
+}
+
+/* Responsive design */
+@media (max-width: 1200px) {
+    .scatter-plot-wrapper {
+        padding: 20px;
+    }
+
+    .row-label {
+        left: -130px;
+        min-width: 100px;
+        font-size: 0.8rem;
+    }
+}
+
+@media (max-width: 992px) {
+    .speed-scatter-container {
+        padding: 15px;
+    }
+
+    .speed-scatter-container h1 {
+        font-size: 2rem;
+    }
+
+    .row-label {
+        left: -110px;
+        min-width: 90px;
+        font-size: 0.75rem;
+        padding: 6px 8px;
+    }
+
+    .pokemon-point {
+        font-size: 0.7rem;
+        padding: 4px 6px;
+        max-width: 100px;
+    }
+}
+
+@media (max-width: 768px) {
+    .speed-scatter-container h1 {
+        font-size: 1.8rem;
+    }
+
+    .scatter-plot-wrapper {
+        padding: 15px;
+        min-height: 500px;
+    }
+
+    .speed-row {
+        height: 80px;
+    }
+
+    .row-label {
+        left: -100px;
+        min-width: 80px;
+        font-size: 0.7rem;
+    }
+
+    .pokemon-point {
+        font-size: 0.65rem;
+        padding: 3px 5px;
+        max-width: 80px;
+    }
+}
+
+/* Loading and empty states */
+.speed-scatter-loading {
+    text-align: center;
+    padding: 80px 20px;
+    color: #6c757d;
+    font-size: 1.2rem;
+}
+
+.speed-scatter-empty {
+    text-align: center;
+    padding: 80px 20px;
+    color: #6c757d;
+}

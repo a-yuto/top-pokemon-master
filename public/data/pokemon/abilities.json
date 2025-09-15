@@ -1,0 +1,2470 @@
+[
+  {
+    "id": 225,
+    "name": "ＡＲシステム",
+    "englishName": "ＡＲシステム",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 248,
+    "name": "アイスフェイス",
+    "englishName": "アイスフェイス",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 115,
+    "name": "アイスボディ",
+    "englishName": "アイスボディ",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 1,
+    "name": "あくしゅう",
+    "englishName": "あくしゅう",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 47,
+    "name": "あついしぼう",
+    "englishName": "あついしぼう",
+    "description": "",
+    "irregular": {
+      "irregularType": "CHANGE_OPPONENT_ATTACKER_ACTUAL_VALUE_BY_MOVE_TYPE",
+      "times": 0.5,
+      "typeNames": [
+        "FIRE",
+        "ICE"
+      ]
+    }
+  },
+  {
+    "id": 100,
+    "name": "あとだし",
+    "englishName": "あとだし",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 148,
+    "name": "アナライズ",
+    "englishName": "アナライズ",
+    "description": "",
+    "irregular": {
+      "irregularType": "CHANGE_MOVE_POWER",
+      "times": 1.3
+    }
+  },
+  {
+    "id": 126,
+    "name": "あまのじゃく",
+    "englishName": "あまのじゃく",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 44,
+    "name": "あめうけざら",
+    "englishName": "あめうけざら",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 2,
+    "name": "あめふらし",
+    "englishName": "あめふらし",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 71,
+    "name": "ありじごく",
+    "englishName": "ありじごく",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 165,
+    "name": "アロマベール",
+    "englishName": "アロマベール",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 22,
+    "name": "いかく",
+    "englishName": "いかく",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 271,
+    "name": "いかりのこうら",
+    "englishName": "いかりのこうら",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 83,
+    "name": "いかりのつぼ",
+    "englishName": "いかりのつぼ",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 69,
+    "name": "いしあたま",
+    "englishName": "いしあたま",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 158,
+    "name": "いたずらごころ",
+    "englishName": "いたずらごころ",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 131,
+    "name": "いやしのこころ",
+    "englishName": "いやしのこころ",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 149,
+    "name": "イリュージョン",
+    "englishName": "イリュージョン",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 110,
+    "name": "いろめがね",
+    "englishName": "いろめがね",
+    "description": "",
+    "irregular": {
+      "irregularType": "CHANGE_NOT_VERY_EFFECTIVE_DAMAGE",
+      "times": 2
+    }
+  },
+  {
+    "id": 276,
+    "name": "いわはこび",
+    "englishName": "いわはこび",
+    "description": "",
+    "irregular": {
+      "irregularType": "CHANGE_ATTACKER_ACTUAL_VALUE_BY_MOVE_TYPE",
+      "times": 1.5,
+      "typeName": "ROCK"
+    }
+  },
+  {
+    "id": 241,
+    "name": "うのミサイル",
+    "englishName": "うのミサイル",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 204,
+    "name": "うるおいボイス",
+    "englishName": "うるおいボイス",
+    "description": "",
+    "irregular": {
+      "irregularType": "LIQUID_VOICE"
+    }
+  },
+  {
+    "id": 93,
+    "name": "うるおいボディ",
+    "englishName": "うるおいボディ",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 76,
+    "name": "エアロック",
+    "englishName": "エアロック",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 206,
+    "name": "エレキスキン",
+    "englishName": "エレキスキン",
+    "description": "",
+    "irregular": {
+      "irregularType": "NON_NORMAL_SKIN",
+      "times": 1.2,
+      "typeName": "ELECTRIC"
+    }
+  },
+  {
+    "id": 226,
+    "name": "エレキメイカー",
+    "englishName": "エレキメイカー",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 203,
+    "name": "えんかく",
+    "englishName": "えんかく",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 283,
+    "name": "おうごんのからだ",
+    "englishName": "おうごんのからだ",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 188,
+    "name": "オーラブレイク",
+    "englishName": "オーラブレイク",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 216,
+    "name": "おどりこ",
+    "englishName": "おどりこ",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 119,
+    "name": "おみとおし",
+    "englishName": "おみとおし",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 303,
+    "name": "おもかげやどし",
+    "englishName": "おもかげやどし",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 300,
+    "name": "おもてなし",
+    "englishName": "おもてなし",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 185,
+    "name": "おやこあい",
+    "englishName": "おやこあい",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 190,
+    "name": "おわりのだいち",
+    "englishName": "おわりのだいち",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 221,
+    "name": "カーリーヘアー",
+    "englishName": "カーリーヘアー",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 52,
+    "name": "かいりきバサミ",
+    "englishName": "かいりきバサミ",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 223,
+    "name": "かがくのちから",
+    "englishName": "かがくのちから",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 256,
+    "name": "かがくへんかガス",
+    "englishName": "かがくへんかガス",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 23,
+    "name": "かげふみ",
+    "englishName": "かげふみ",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 274,
+    "name": "かぜのり",
+    "englishName": "かぜのり",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 3,
+    "name": "かそく",
+    "englishName": "かそく",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 181,
+    "name": "かたいツメ",
+    "englishName": "かたいツメ",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 104,
+    "name": "かたやぶり",
+    "englishName": "かたやぶり",
+    "description": "",
+    "irregular": {
+      "irregularType": "MOLD_BREAKER",
+      "noIgnoreAbilityIds": [
+        231,
+        232,
+        281,
+        282,
+        284,
+        285,
+        286,
+        287
+      ]
+    }
+  },
+  {
+    "id": 172,
+    "name": "かちき",
+    "englishName": "かちき",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 4,
+    "name": "カブトアーマー",
+    "englishName": "カブトアーマー",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 84,
+    "name": "かるわざ",
+    "englishName": "かるわざ",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 150,
+    "name": "かわりもの",
+    "englishName": "かわりもの",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 5,
+    "name": "がんじょう",
+    "englishName": "がんじょう",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 173,
+    "name": "がんじょうあご",
+    "englishName": "がんじょうあご",
+    "description": "",
+    "irregular": {
+      "irregularType": "USE_ATTACKER_MOVE_GENRE",
+      "targetMoveGenre": "BITING",
+      "times": 1.5
+    }
+  },
+  {
+    "id": 87,
+    "name": "かんそうはだ",
+    "englishName": "かんそうはだ",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 299,
+    "name": "かんろなミツ",
+    "englishName": "かんろなミツ",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 194,
+    "name": "ききかいひ",
+    "englishName": "ききかいひ",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 107,
+    "name": "きけんよち",
+    "englishName": "きけんよち",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 210,
+    "name": "きずなへんげ",
+    "englishName": "きずなへんげ",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 250,
+    "name": "ぎたい",
+    "englishName": "ぎたい",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 261,
+    "name": "きみょうなくすり",
+    "englishName": "きみょうなくすり",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 113,
+    "name": "きもったま",
+    "englishName": "きもったま",
+    "description": "",
+    "irregular": {
+      "irregularType": "CHANGE_TYPE_COMPATIBILITY_VALUE_FOR_ATTACKER",
+      "typeCompatibilityfixing": [
+        {
+          "attackerMoveType": "NORMAL",
+          "defenderType": "GHOST",
+          "times": 1
+        },
+        {
+          "attackerMoveType": "FIGHTING",
+          "defenderType": "GHOST",
+          "times": 1
+        }
+      ]
+    }
+  },
+  {
+    "id": 201,
+    "name": "ぎゃくじょう",
+    "englishName": "ぎゃくじょう",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 21,
+    "name": "きゅうばん",
+    "englishName": "きゅうばん",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 105,
+    "name": "きょううん",
+    "englishName": "きょううん",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 294,
+    "name": "きょうえん",
+    "englishName": "きょうえん",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 180,
+    "name": "きょうせい",
+    "englishName": "きょうせい",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 208,
+    "name": "ぎょぐん",
+    "englishName": "ぎょぐん",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 272,
+    "name": "きよめのしお",
+    "englishName": "きよめのしお",
+    "description": "",
+    "irregular": {
+      "irregularType": "CHANGE_OPPONENT_ATTACKER_ACTUAL_VALUE_BY_MOVE_TYPE",
+      "times": 0.5,
+      "typeNames": [
+        "GHOST"
+      ]
+    }
+  },
+  {
+    "id": 292,
+    "name": "きれあじ",
+    "englishName": "きれあじ",
+    "description": "",
+    "irregular": {
+      "irregularType": "USE_ATTACKER_MOVE_GENRE",
+      "targetMoveGenre": "SLICING",
+      "times": 1.5
+    }
+  },
+  {
+    "id": 298,
+    "name": "きんしのちから",
+    "englishName": "きんしのちから",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 127,
+    "name": "きんちょうかん",
+    "englishName": "きんちょうかん",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 82,
+    "name": "くいしんぼう",
+    "englishName": "くいしんぼう",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 259,
+    "name": "クイックドロウ",
+    "englishName": "クイックドロウ",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 282,
+    "name": "クォークチャージ",
+    "englishName": "クォークチャージ",
+    "description": "",
+    "irregular": {
+      "irregularType": "CHANGE_MAX_ACTUAL_VALUE",
+      "times": 1.3
+    }
+  },
+  {
+    "id": 179,
+    "name": "くさのけがわ",
+    "englishName": "くさのけがわ",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 133,
+    "name": "くだけるよろい",
+    "englishName": "くだけるよろい",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 229,
+    "name": "グラスメイカー",
+    "englishName": "グラスメイカー",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 29,
+    "name": "クリアボディ",
+    "englishName": "クリアボディ",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 265,
+    "name": "くろのいななき",
+    "englishName": "くろのいななき",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 67,
+    "name": "げきりゅう",
+    "englishName": "げきりゅう",
+    "description": "",
+    "irregular": {
+      "irregularType": "CHANGE_ATTACKER_ACTUAL_VALUE_BY_MOVE_TYPE",
+      "times": 1.5,
+      "typeName": "WATER"
+    }
+  },
+  {
+    "id": 246,
+    "name": "こおりのりんぷん",
+    "englishName": "こおりのりんぷん",
+    "description": "",
+    "irregular": {
+      "irregularType": "CHANGE_DAMAGE_BY_MOVE_CATEGORY",
+      "moveCategory": "SPECIAL",
+      "times": 0.5
+    }
+  },
+  {
+    "id": 281,
+    "name": "こだいかっせい",
+    "englishName": "こだいかっせい",
+    "description": "",
+    "irregular": {
+      "irregularType": "CHANGE_MAX_ACTUAL_VALUE",
+      "times": 1.3
+    }
+  },
+  {
+    "id": 269,
+    "name": "こぼれダネ",
+    "englishName": "こぼれダネ",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 255,
+    "name": "ごりむちゅう",
+    "englishName": "ごりむちゅう",
+    "description": "",
+    "irregular": {
+      "irregularType": "USE_MOVE_CATEGORY",
+      "times": 1.5,
+      "moveCategories": [
+        "PHYSICAL"
+      ]
+    }
+  },
+  {
+    "id": 273,
+    "name": "こんがりボディ",
+    "englishName": "こんがりボディ",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 62,
+    "name": "こんじょう",
+    "englishName": "こんじょう",
+    "description": "",
+    "irregular": {
+      "irregularType": "USE_MOVE_CATEGORY",
+      "times": 1.5,
+      "moveCategories": [
+        "PHYSICAL"
+      ]
+    }
+  },
+  {
+    "id": 207,
+    "name": "サーフテール",
+    "englishName": "サーフテール",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 227,
+    "name": "サイコメイカー",
+    "englishName": "サイコメイカー",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 144,
+    "name": "さいせいりょく",
+    "englishName": "さいせいりょく",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 254,
+    "name": "さまようたましい",
+    "englishName": "さまようたましい",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 24,
+    "name": "さめはだ",
+    "englishName": "さめはだ",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 94,
+    "name": "サンパワー",
+    "englishName": "サンパワー",
+    "description": "",
+    "irregular": {
+      "irregularType": "CHANGE_ATTACKER_ACTUAL_VALUE_BY_WEATHER",
+      "times": 1.5,
+      "statName": "SPECIAL_ATTACK",
+      "weatherName": "SUNNY"
+    }
+  },
+  {
+    "id": 75,
+    "name": "シェルアーマー",
+    "englishName": "シェルアーマー",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 192,
+    "name": "じきゅうりょく",
+    "englishName": "じきゅうりょく",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 153,
+    "name": "じしんかじょう",
+    "englishName": "じしんかじょう",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 30,
+    "name": "しぜんかいふく",
+    "englishName": "しぜんかいふく",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 6,
+    "name": "しめりけ",
+    "englishName": "しめりけ",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 139,
+    "name": "しゅうかく",
+    "englishName": "しゅうかく",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 7,
+    "name": "じゅうなん",
+    "englishName": "じゅうなん",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 247,
+    "name": "じゅくせい",
+    "englishName": "じゅくせい",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 243,
+    "name": "じょうききかん",
+    "englishName": "じょうききかん",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 162,
+    "name": "しょうりのほし",
+    "englishName": "しょうりのほし",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 214,
+    "name": "じょおうのいげん",
+    "englishName": "じょおうのいげん",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 42,
+    "name": "じりょく",
+    "englishName": "じりょく",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 279,
+    "name": "しれいとう",
+    "englishName": "しれいとう",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 73,
+    "name": "しろいけむり",
+    "englishName": "しろいけむり",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 264,
+    "name": "しろのいななき",
+    "englishName": "しろのいななき",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 301,
+    "name": "しんがん",
+    "englishName": "しんがん",
+    "description": "",
+    "irregular": {
+      "irregularType": "CHANGE_TYPE_COMPATIBILITY_VALUE_FOR_ATTACKER",
+      "typeCompatibilityfixing": [
+        {
+          "attackerMoveType": "NORMAL",
+          "defenderType": "GHOST",
+          "times": 1
+        },
+        {
+          "attackerMoveType": "FIGHTING",
+          "defenderType": "GHOST",
+          "times": 1
+        }
+      ]
+    }
+  },
+  {
+    "id": 28,
+    "name": "シンクロ",
+    "englishName": "シンクロ",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 266,
+    "name": "じんばいったい",
+    "englishName": "じんばいったい",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 65,
+    "name": "しんりょく",
+    "englishName": "しんりょく",
+    "description": "",
+    "irregular": {
+      "irregularType": "CHANGE_ATTACKER_ACTUAL_VALUE_BY_MOVE_TYPE",
+      "times": 1.5,
+      "typeName": "GRASS"
+    }
+  },
+  {
+    "id": 175,
+    "name": "スイートベール",
+    "englishName": "スイートベール",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 33,
+    "name": "すいすい",
+    "englishName": "すいすい",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 199,
+    "name": "すいほう",
+    "englishName": "すいほう",
+    "description": "",
+    "irregular": {
+      "irregularType": "WATER_BUBBLE"
+    }
+  },
+  {
+    "id": 184,
+    "name": "スカイスキン",
+    "englishName": "スカイスキン",
+    "description": "",
+    "irregular": {
+      "irregularType": "NON_NORMAL_SKIN",
+      "times": 1.2,
+      "typeName": "FLYING"
+    }
+  },
+  {
+    "id": 92,
+    "name": "スキルリンク",
+    "englishName": "スキルリンク",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 239,
+    "name": "スクリューおびれ",
+    "englishName": "スクリューおびれ",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 242,
+    "name": "すじがねいり",
+    "englishName": "すじがねいり",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 120,
+    "name": "すてみ",
+    "englishName": "すてみ",
+    "description": "",
+    "irregular": {
+      "irregularType": "USE_ATTACKER_MOVE_GENRE",
+      "targetMoveGenre": "RECOIL",
+      "times": 1.2
+    }
+  },
+  {
+    "id": 97,
+    "name": "スナイパー",
+    "englishName": "スナイパー",
+    "description": "",
+    "irregular": {
+      "irregularType": "CHANGE_CRITICAL_DAMAGE",
+      "times": 1.5
+    }
+  },
+  {
+    "id": 45,
+    "name": "すなおこし",
+    "englishName": "すなおこし",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 146,
+    "name": "すなかき",
+    "englishName": "すなかき",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 8,
+    "name": "すながくれ",
+    "englishName": "すながくれ",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 159,
+    "name": "すなのちから",
+    "englishName": "すなのちから",
+    "description": "",
+    "irregular": {
+      "irregularType": "CHANGE_MOVE_POWER_BY_WEATHER",
+      "times": 1.3,
+      "weatherName": "SANDSTORM",
+      "typeNames": [
+        "ROCK",
+        "GROUND",
+        "STEEL"
+      ]
+    }
+  },
+  {
+    "id": 245,
+    "name": "すなはき",
+    "englishName": "すなはき",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 151,
+    "name": "すりぬけ",
+    "englishName": "すりぬけ",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 51,
+    "name": "するどいめ",
+    "englishName": "するどいめ",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 112,
+    "name": "スロースタート",
+    "englishName": "スロースタート",
+    "description": "",
+    "irregular": {
+      "irregularType": "USE_MOVE_CATEGORY",
+      "times": 0.5,
+      "moveCategories": [
+        "PHYSICAL"
+      ]
+    }
+  },
+  {
+    "id": 211,
+    "name": "スワームチェンジ",
+    "englishName": "スワームチェンジ",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 154,
+    "name": "せいぎのこころ",
+    "englishName": "せいぎのこころ",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 39,
+    "name": "せいしんりょく",
+    "englishName": "せいしんりょく",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 9,
+    "name": "せいでんき",
+    "englishName": "せいでんき",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 213,
+    "name": "ぜったいねむり",
+    "englishName": "ぜったいねむり",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 306,
+    "name": "ゼロフォーミング",
+    "englishName": "ゼロフォーミング",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 157,
+    "name": "そうしょく",
+    "englishName": "そうしょく",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 293,
+    "name": "そうだいしょう",
+    "englishName": "そうだいしょう",
+    "description": "",
+    "irregular": {
+      "irregularType": "SUPREME_OVERLOAD",
+      "count": 0
+    }
+  },
+  {
+    "id": 220,
+    "name": "ソウルハート",
+    "englishName": "ソウルハート",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 186,
+    "name": "ダークオーラ",
+    "englishName": "ダークオーラ",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 163,
+    "name": "ターボブレイズ",
+    "englishName": "ターボブレイズ",
+    "description": "",
+    "irregular": {
+      "irregularType": "MOLD_BREAKER",
+      "noIgnoreAbilityIds": [
+        231,
+        232,
+        281,
+        282,
+        284,
+        285,
+        286,
+        287
+      ]
+    }
+  },
+  {
+    "id": 85,
+    "name": "たいねつ",
+    "englishName": "たいねつ",
+    "description": "",
+    "irregular": {
+      "irregularType": "CHANGE_OPPONENT_ATTACKER_ACTUAL_VALUE_BY_MOVE_TYPE",
+      "times": 0.5,
+      "typeNames": [
+        "FIRE"
+      ]
+    }
+  },
+  {
+    "id": 88,
+    "name": "ダウンロード",
+    "englishName": "ダウンロード",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 61,
+    "name": "だっぴ",
+    "englishName": "だっぴ",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 237,
+    "name": "たまひろい",
+    "englishName": "たまひろい",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 161,
+    "name": "ダルマモード",
+    "englishName": "ダルマモード",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 86,
+    "name": "たんじゅん",
+    "englishName": "たんじゅん",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 125,
+    "name": "ちからずく",
+    "englishName": "ちからずく",
+    "description": "",
+    "irregular": {
+      "irregularType": "USE_ATTACKER_MOVE_GENRE",
+      "targetMoveGenre": "ADDITIONAL_EFFECTS",
+      "times": 1.3
+    }
+  },
+  {
+    "id": 37,
+    "name": "ちからもち",
+    "englishName": "ちからもち",
+    "description": "",
+    "irregular": {
+      "irregularType": "USE_MOVE_CATEGORY",
+      "times": 2,
+      "moveCategories": [
+        "PHYSICAL"
+      ]
+    }
+  },
+  {
+    "id": 10,
+    "name": "ちくでん",
+    "englishName": "ちくでん",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 77,
+    "name": "ちどりあし",
+    "englishName": "ちどりあし",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 11,
+    "name": "ちょすい",
+    "englishName": "ちょすい",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 296,
+    "name": "テイルアーマー",
+    "englishName": "テイルアーマー",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 91,
+    "name": "てきおうりょく",
+    "englishName": "てきおうりょく",
+    "description": "",
+    "irregular": {
+      "irregularType": "USE_TYPE_MATCH",
+      "times": 2,
+      "timesForTeratype": 2.25
+    }
+  },
+  {
+    "id": 101,
+    "name": "テクニシャン",
+    "englishName": "テクニシャン",
+    "description": "",
+    "irregular": {
+      "irregularType": "USE_MOVE_POWER",
+      "times": 1.5,
+      "movePower": 60
+    }
+  },
+  {
+    "id": 89,
+    "name": "てつのこぶし",
+    "englishName": "てつのこぶし",
+    "description": "",
+    "irregular": {
+      "irregularType": "USE_ATTACKER_MOVE_GENRE",
+      "targetMoveGenre": "PUNCHING",
+      "times": 1.2
+    }
+  },
+  {
+    "id": 160,
+    "name": "てつのトゲ",
+    "englishName": "てつのトゲ",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 305,
+    "name": "テラスシェル",
+    "englishName": "テラスシェル",
+    "description": "",
+    "irregular": {
+      "irregularType": "TERA_SHELL"
+    }
+  },
+  {
+    "id": 304,
+    "name": "テラスチェンジ",
+    "englishName": "テラスチェンジ",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 164,
+    "name": "テラボルテージ",
+    "englishName": "テラボルテージ",
+    "description": "",
+    "irregular": {
+      "irregularType": "MOLD_BREAKER",
+      "noIgnoreAbilityIds": [
+        231,
+        232,
+        281,
+        282,
+        284,
+        285,
+        286,
+        287
+      ]
+    }
+  },
+  {
+    "id": 191,
+    "name": "デルタストリーム",
+    "englishName": "デルタストリーム",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 140,
+    "name": "テレパシー",
+    "englishName": "テレパシー",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 78,
+    "name": "でんきエンジン",
+    "englishName": "でんきエンジン",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 280,
+    "name": "でんきにかえる",
+    "englishName": "でんきにかえる",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 59,
+    "name": "てんきや",
+    "englishName": "てんきや",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 109,
+    "name": "てんねん",
+    "englishName": "てんねん",
+    "description": "",
+    "irregular": {
+      "irregularType": "UNAWARE"
+    }
+  },
+  {
+    "id": 32,
+    "name": "てんのめぐみ",
+    "englishName": "てんのめぐみ",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 79,
+    "name": "とうそうしん",
+    "englishName": "とうそうしん",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 307,
+    "name": "どくくぐつ",
+    "englishName": "どくくぐつ",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 295,
+    "name": "どくげしょう",
+    "englishName": "どくげしょう",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 143,
+    "name": "どくしゅ",
+    "englishName": "どくしゅ",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 302,
+    "name": "どくのくさり",
+    "englishName": "どくのくさり",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 38,
+    "name": "どくのトゲ",
+    "englishName": "どくのトゲ",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 137,
+    "name": "どくぼうそう",
+    "englishName": "どくぼうそう",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 297,
+    "name": "どしょく",
+    "englishName": "どしょく",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 215,
+    "name": "とびだすなかみ",
+    "englishName": "とびだすなかみ",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 262,
+    "name": "トランジスタ",
+    "englishName": "トランジスタ",
+    "description": "",
+    "irregular": {
+      "irregularType": "CHANGE_ATTACKER_ACTUAL_VALUE_BY_MOVE_TYPE",
+      "times": 1.3,
+      "typeName": "ELECTRIC"
+    }
+  },
+  {
+    "id": 36,
+    "name": "トレース",
+    "englishName": "トレース",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 268,
+    "name": "とれないにおい",
+    "englishName": "とれないにおい",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 12,
+    "name": "どんかん",
+    "englishName": "どんかん",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 123,
+    "name": "ナイトメア",
+    "englishName": "ナイトメア",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 54,
+    "name": "なまけ",
+    "englishName": "なまけ",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 50,
+    "name": "にげあし",
+    "englishName": "にげあし",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 193,
+    "name": "にげごし",
+    "englishName": "にげごし",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 183,
+    "name": "ぬめぬめ",
+    "englishName": "ぬめぬめ",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 270,
+    "name": "ねつこうかん",
+    "englishName": "ねつこうかん",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 138,
+    "name": "ねつぼうそう",
+    "englishName": "ねつぼうそう",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 60,
+    "name": "ねんちゃく",
+    "englishName": "ねんちゃく",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 99,
+    "name": "ノーガード",
+    "englishName": "ノーガード",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 13,
+    "name": "ノーてんき",
+    "englishName": "ノーてんき",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 96,
+    "name": "ノーマルスキン",
+    "englishName": "ノーマルスキン",
+    "description": "",
+    "irregular": {
+      "irregularType": "NORMAL_SKIN",
+      "times": 1.2
+    }
+  },
+  {
+    "id": 130,
+    "name": "のろわれボディ",
+    "englishName": "のろわれボディ",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 116,
+    "name": "ハードロック",
+    "englishName": "ハードロック",
+    "description": "",
+    "irregular": {
+      "irregularType": "CHANGE_SUPER_EFFECTIVE_DAMAGE",
+      "times": 0.75
+    }
+  },
+  {
+    "id": 200,
+    "name": "はがねつかい",
+    "englishName": "はがねつかい",
+    "description": "",
+    "irregular": {
+      "irregularType": "CHANGE_ATTACKER_ACTUAL_VALUE_BY_MOVE_TYPE",
+      "times": 1.5,
+      "typeName": "STEEL"
+    }
+  },
+  {
+    "id": 252,
+    "name": "はがねのせいしん",
+    "englishName": "はがねのせいしん",
+    "description": "",
+    "irregular": {
+      "irregularType": "CHANGE_MOVE_POWER_BY_MOVE_TYPE",
+      "times": 1.5,
+      "typeName": "STEEL"
+    }
+  },
+  {
+    "id": 209,
+    "name": "ばけのかわ",
+    "englishName": "ばけのかわ",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 189,
+    "name": "はじまりのうみ",
+    "englishName": "はじまりのうみ",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 257,
+    "name": "パステルベール",
+    "englishName": "パステルベール",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 35,
+    "name": "はっこう",
+    "englishName": "はっこう",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 217,
+    "name": "バッテリー",
+    "englishName": "バッテリー",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 145,
+    "name": "はとむね",
+    "englishName": "はとむね",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 176,
+    "name": "バトルスイッチ",
+    "englishName": "バトルスイッチ",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 289,
+    "name": "ハドロンエンジン",
+    "englishName": "ハドロンエンジン",
+    "description": "",
+    "irregular": {
+      "irregularType": "CHANGE_ATTACKER_ACTUAL_VALUE_BY_FIELD",
+      "times": 1.3332,
+      "statName": "SPECIAL_ATTACK",
+      "fieldName": "ELECTRIC"
+    }
+  },
+  {
+    "id": 95,
+    "name": "はやあし",
+    "englishName": "はやあし",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 48,
+    "name": "はやおき",
+    "englishName": "はやおき",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 177,
+    "name": "はやてのつばさ",
+    "englishName": "はやてのつばさ",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 258,
+    "name": "はらぺこスイッチ",
+    "englishName": "はらぺこスイッチ",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 251,
+    "name": "バリアフリー",
+    "englishName": "バリアフリー",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 55,
+    "name": "はりきり",
+    "englishName": "はりきり",
+    "description": "",
+    "irregular": {
+      "irregularType": "USE_MOVE_CATEGORY_FOR_FINAL_ACTUAL_VALUE",
+      "times": 1.5,
+      "moveCategories": [
+        "PHYSICAL"
+      ]
+    }
+  },
+  {
+    "id": 198,
+    "name": "はりこみ",
+    "englishName": "はりこみ",
+    "description": "",
+    "irregular": {
+      "irregularType": "USE_MOVE_CATEGORY",
+      "times": 2,
+      "moveCategories": [
+        "PHYSICAL",
+        "SPECIAL"
+      ]
+    }
+  },
+  {
+    "id": 249,
+    "name": "パワースポット",
+    "englishName": "パワースポット",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 244,
+    "name": "パンクロック",
+    "englishName": "パンクロック",
+    "description": "",
+    "irregular": {
+      "irregularType": "PUNK_ROCK"
+    }
+  },
+  {
+    "id": 275,
+    "name": "ばんけん",
+    "englishName": "ばんけん",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 291,
+    "name": "はんすう",
+    "englishName": "はんすう",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 224,
+    "name": "ビーストブースト",
+    "englishName": "ビーストブースト",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 205,
+    "name": "ヒーリングシフト",
+    "englishName": "ヒーリングシフト",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 70,
+    "name": "ひでり",
+    "englishName": "ひでり",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 196,
+    "name": "ひとでなし",
+    "englishName": "ひとでなし",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 288,
+    "name": "ひひいろのこどう",
+    "englishName": "ひひいろのこどう",
+    "description": "",
+    "irregular": {
+      "irregularType": "CHANGE_ATTACKER_ACTUAL_VALUE_BY_WEATHER",
+      "times": 1.3332,
+      "statName": "ATTACK",
+      "weatherName": "SUNNY"
+    }
+  },
+  {
+    "id": 219,
+    "name": "ビビッドボディ",
+    "englishName": "ビビッドボディ",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 155,
+    "name": "びびり",
+    "englishName": "びびり",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 31,
+    "name": "ひらいしん",
+    "englishName": "ひらいしん",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 290,
+    "name": "びんじょう",
+    "englishName": "びんじょう",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 169,
+    "name": "ファーコート",
+    "englishName": "ファーコート",
+    "description": "",
+    "irregular": {
+      "irregularType": "CHANGE_DEFENDER_ACTUAL_VALUE",
+      "times": 2,
+      "moveCategories": [
+        "PHYSICAL"
+      ]
+    }
+  },
+  {
+    "id": 231,
+    "name": "ファントムガード",
+    "englishName": "ファントムガード",
+    "description": "",
+    "irregular": {
+      "irregularType": "CHANGE_DAMAGE",
+      "times": 0.5
+    }
+  },
+  {
+    "id": 111,
+    "name": "フィルター",
+    "englishName": "フィルター",
+    "description": "",
+    "irregular": {
+      "irregularType": "CHANGE_SUPER_EFFECTIVE_DAMAGE",
+      "times": 0.75
+    }
+  },
+  {
+    "id": 277,
+    "name": "ふうりょくでんき",
+    "englishName": "ふうりょくでんき",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 187,
+    "name": "フェアリーオーラ",
+    "englishName": "フェアリーオーラ",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 182,
+    "name": "フェアリースキン",
+    "englishName": "フェアリースキン",
+    "description": "",
+    "irregular": {
+      "irregularType": "NON_NORMAL_SKIN",
+      "times": 1.2,
+      "typeName": "FAIRY"
+    }
+  },
+  {
+    "id": 260,
+    "name": "ふかしのこぶし",
+    "englishName": "ふかしのこぶし",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 103,
+    "name": "ぶきよう",
+    "englishName": "ぶきよう",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 14,
+    "name": "ふくがん",
+    "englishName": "ふくがん",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 80,
+    "name": "ふくつのこころ",
+    "englishName": "ふくつのこころ",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 235,
+    "name": "ふくつのたて",
+    "englishName": "ふくつのたて",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 63,
+    "name": "ふしぎなうろこ",
+    "englishName": "ふしぎなうろこ",
+    "description": "",
+    "irregular": {
+      "irregularType": "CHANGE_DEFENDER_ACTUAL_VALUE",
+      "times": 1.5,
+      "moveCategories": [
+        "PHYSICAL"
+      ]
+    }
+  },
+  {
+    "id": 25,
+    "name": "ふしぎなまもり",
+    "englishName": "ふしぎなまもり",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 212,
+    "name": "ふしょく",
+    "englishName": "ふしょく",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 234,
+    "name": "ふとうのけん",
+    "englishName": "ふとうのけん",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 15,
+    "name": "ふみん",
+    "englishName": "ふみん",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 26,
+    "name": "ふゆう",
+    "englishName": "ふゆう",
+    "description": "",
+    "irregular": {
+      "irregularType": "LEVITATE"
+    }
+  },
+  {
+    "id": 57,
+    "name": "プラス",
+    "englishName": "プラス",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 122,
+    "name": "フラワーギフト",
+    "englishName": "フラワーギフト",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 166,
+    "name": "フラワーベール",
+    "englishName": "フラワーベール",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 174,
+    "name": "フリーズスキン",
+    "englishName": "フリーズスキン",
+    "description": "",
+    "irregular": {
+      "irregularType": "NON_NORMAL_SKIN",
+      "times": 1.2,
+      "typeName": "ICE"
+    }
+  },
+  {
+    "id": 232,
+    "name": "プリズムアーマー",
+    "englishName": "プリズムアーマー",
+    "description": "",
+    "irregular": {
+      "irregularType": "CHANGE_SUPER_EFFECTIVE_DAMAGE",
+      "times": 0.75
+    }
+  },
+  {
+    "id": 233,
+    "name": "ブレインフォース",
+    "englishName": "ブレインフォース",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 46,
+    "name": "プレッシャー",
+    "englishName": "プレッシャー",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 132,
+    "name": "フレンドガード",
+    "englishName": "フレンドガード",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 134,
+    "name": "ヘヴィメタル",
+    "englishName": "ヘヴィメタル",
+    "description": "",
+    "irregular": {
+      "irregularType": "CHANGE_WEIGHT",
+      "times": 2
+    }
+  },
+  {
+    "id": 64,
+    "name": "ヘドロえき",
+    "englishName": "ヘドロえき",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 168,
+    "name": "へんげんじざい",
+    "englishName": "へんげんじざい",
+    "description": "",
+    "irregular": {
+      "irregularType": "CHANGE_TYPE_BY_MOVE"
+    }
+  },
+  {
+    "id": 16,
+    "name": "へんしょく",
+    "englishName": "へんしょく",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 90,
+    "name": "ポイズンヒール",
+    "englishName": "ポイズンヒール",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 43,
+    "name": "ぼうおん",
+    "englishName": "ぼうおん",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 27,
+    "name": "ほうし",
+    "englishName": "ほうし",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 142,
+    "name": "ぼうじん",
+    "englishName": "ぼうじん",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 171,
+    "name": "ぼうだん",
+    "englishName": "ぼうだん",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 167,
+    "name": "ほおぶくろ",
+    "englishName": "ほおぶくろ",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 49,
+    "name": "ほのおのからだ",
+    "englishName": "ほのおのからだ",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 253,
+    "name": "ほろびのボディ",
+    "englishName": "ほろびのボディ",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 278,
+    "name": "マイティチェンジ",
+    "englishName": "マイティチェンジ",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 58,
+    "name": "マイナス",
+    "englishName": "マイナス",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 20,
+    "name": "マイペース",
+    "englishName": "マイペース",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 40,
+    "name": "マグマのよろい",
+    "englishName": "マグマのよろい",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 128,
+    "name": "まけんき",
+    "englishName": "まけんき",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 170,
+    "name": "マジシャン",
+    "englishName": "マジシャン",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 98,
+    "name": "マジックガード",
+    "englishName": "マジックガード",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 156,
+    "name": "マジックミラー",
+    "englishName": "マジックミラー",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 136,
+    "name": "マルチスケイル",
+    "englishName": "マルチスケイル",
+    "description": "",
+    "irregular": {
+      "irregularType": "CHANGE_DAMAGE",
+      "times": 0.5
+    }
+  },
+  {
+    "id": 121,
+    "name": "マルチタイプ",
+    "englishName": "マルチタイプ",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 152,
+    "name": "ミイラ",
+    "englishName": "ミイラ",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 195,
+    "name": "みずがため",
+    "englishName": "みずがため",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 228,
+    "name": "ミストメイカー",
+    "englishName": "ミストメイカー",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 41,
+    "name": "みずのベール",
+    "englishName": "みずのベール",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 118,
+    "name": "みつあつめ",
+    "englishName": "みつあつめ",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 240,
+    "name": "ミラーアーマー",
+    "englishName": "ミラーアーマー",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 147,
+    "name": "ミラクルスキン",
+    "englishName": "ミラクルスキン",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 68,
+    "name": "むしのしらせ",
+    "englishName": "むしのしらせ",
+    "description": "",
+    "irregular": {
+      "irregularType": "CHANGE_ATTACKER_ACTUAL_VALUE_BY_MOVE_TYPE",
+      "times": 1.5,
+      "typeName": "BUG"
+    }
+  },
+  {
+    "id": 141,
+    "name": "ムラっけ",
+    "englishName": "ムラっけ",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 178,
+    "name": "メガランチャー",
+    "englishName": "メガランチャー",
+    "description": "",
+    "irregular": {
+      "irregularType": "USE_ATTACKER_MOVE_GENRE",
+      "targetMoveGenre": "AURA_AND_PULSE",
+      "times": 1.5
+    }
+  },
+  {
+    "id": 230,
+    "name": "メタルプロテクト",
+    "englishName": "メタルプロテクト",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 56,
+    "name": "メロメロボディ",
+    "englishName": "メロメロボディ",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 17,
+    "name": "めんえき",
+    "englishName": "めんえき",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 66,
+    "name": "もうか",
+    "englishName": "もうか",
+    "description": "",
+    "irregular": {
+      "irregularType": "CHANGE_ATTACKER_ACTUAL_VALUE_BY_MOVE_TYPE",
+      "times": 1.5,
+      "typeName": "FIRE"
+    }
+  },
+  {
+    "id": 53,
+    "name": "ものひろい",
+    "englishName": "ものひろい",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 218,
+    "name": "もふもふ",
+    "englishName": "もふもふ",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 18,
+    "name": "もらいび",
+    "englishName": "もらいび",
+    "description": "",
+    "irregular": {
+      "irregularType": "FLASH_FIRE"
+    }
+  },
+  {
+    "id": 72,
+    "name": "やるき",
+    "englishName": "やるき",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 106,
+    "name": "ゆうばく",
+    "englishName": "ゆうばく",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 202,
+    "name": "ゆきかき",
+    "englishName": "ゆきかき",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 81,
+    "name": "ゆきがくれ",
+    "englishName": "ゆきがくれ",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 117,
+    "name": "ゆきふらし",
+    "englishName": "ゆきふらし",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 34,
+    "name": "ようりょくそ",
+    "englishName": "ようりょくそ",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 74,
+    "name": "ヨガパワー",
+    "englishName": "ヨガパワー",
+    "description": "",
+    "irregular": {
+      "irregularType": "USE_MOVE_CATEGORY",
+      "times": 2,
+      "moveCategories": [
+        "PHYSICAL"
+      ]
+    }
+  },
+  {
+    "id": 108,
+    "name": "よちむ",
+    "englishName": "よちむ",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 114,
+    "name": "よびみず",
+    "englishName": "よびみず",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 129,
+    "name": "よわき",
+    "englishName": "よわき",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 135,
+    "name": "ライトメタル",
+    "englishName": "ライトメタル",
+    "description": "",
+    "irregular": {
+      "irregularType": "CHANGE_WEIGHT",
+      "times": 0.5
+    }
+  },
+  {
+    "id": 102,
+    "name": "リーフガード",
+    "englishName": "リーフガード",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 236,
+    "name": "リベロ",
+    "englishName": "リベロ",
+    "description": "",
+    "irregular": {
+      "irregularType": "CHANGE_TYPE_BY_MOVE"
+    }
+  },
+  {
+    "id": 197,
+    "name": "リミットシールド",
+    "englishName": "リミットシールド",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 263,
+    "name": "りゅうのあぎと",
+    "englishName": "りゅうのあぎと",
+    "description": "",
+    "irregular": {
+      "irregularType": "CHANGE_ATTACKER_ACTUAL_VALUE_BY_MOVE_TYPE",
+      "times": 1.5,
+      "typeName": "DRAGON"
+    }
+  },
+  {
+    "id": 19,
+    "name": "りんぷん",
+    "englishName": "りんぷん",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 222,
+    "name": "レシーバー",
+    "englishName": "レシーバー",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 284,
+    "name": "わざわいのうつわ",
+    "englishName": "わざわいのうつわ",
+    "description": "",
+    "irregular": {
+      "irregularType": "RUIN",
+      "times": 0.75,
+      "statName": "SPECIAL_ATTACK"
+    }
+  },
+  {
+    "id": 286,
+    "name": "わざわいのおふだ",
+    "englishName": "わざわいのおふだ",
+    "description": "",
+    "irregular": {
+      "irregularType": "RUIN",
+      "times": 0.75,
+      "statName": "ATTACK"
+    }
+  },
+  {
+    "id": 287,
+    "name": "わざわいのたま",
+    "englishName": "わざわいのたま",
+    "description": "",
+    "irregular": {
+      "irregularType": "RUIN",
+      "times": 0.75,
+      "statName": "SPECIAL_DEFENSE"
+    }
+  },
+  {
+    "id": 285,
+    "name": "わざわいのつるぎ",
+    "englishName": "わざわいのつるぎ",
+    "description": "",
+    "irregular": {
+      "irregularType": "RUIN",
+      "times": 0.75,
+      "statName": "DEFENSE"
+    }
+  },
+  {
+    "id": 238,
+    "name": "わたげ",
+    "englishName": "わたげ",
+    "description": "",
+    "irregular": null
+  },
+  {
+    "id": 124,
+    "name": "わるいてぐせ",
+    "englishName": "わるいてぐせ",
+    "description": "",
+    "irregular": null
+  }
+]

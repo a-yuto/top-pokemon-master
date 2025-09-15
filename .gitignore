@@ -1,0 +1,13 @@
+node_modules/
+elm-stuff/
+dist/
+.elm-pages/
+functions/render/elm-pages-cli.mjs
+functions/server-render/elm-pages-cli.mjs
+
+# MCP related
+.mcp/logs/
+.mcp/cache/
+mcp-screenshots/
+playwright-report/
+test-results/

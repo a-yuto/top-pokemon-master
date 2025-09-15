@@ -1,0 +1,18 @@
+{
+  "name": "top-pokemon-master",
+  "description": "Pokemon Elm Pages Application MCP Configuration",
+  "mcpServers": {
+    "playwright": {
+      "command": "npx",
+      "args": ["@playwright/mcp@latest"],
+      "options": {
+        "browser": "chromium",
+        "headless": false
+      }
+    }
+  },
+  "testUrls": {
+    "local": "http://localhost:1234",
+    "production": "https://your-netlify-app.netlify.app"
+  }
+}
