@@ -194,12 +194,12 @@ generateWeightedBattleKataPair =
 generateWeightedPokemon : Random.Generator Pokemon
 generateWeightedPokemon =
     let
-        rankings = UsageData.season34Rankings
+        rankings = List.take 50 UsageData.season34Rankings
         weights = List.map getRankingWeight rankings
         cumulativeWeights = buildCumulativeWeights weights
         totalWeight = getTotalWeight cumulativeWeights
-        
-        pokemonGenerator = 
+
+        pokemonGenerator =
             Random.map (selectPokemonByWeight cumulativeWeights rankings) (Random.int 1 totalWeight)
     in
     Random.map extractPokemonFromMaybe pokemonGenerator
@@ -209,7 +209,7 @@ extractPokemonFromMaybe : Maybe Pokemon -> Pokemon
 extractPokemonFromMaybe maybePokemon =
     case maybePokemon of
         Just pokemon -> pokemon
-        Nothing -> getDefaultPokemon (Array.fromList UsageData.selectTop150Pokemon)
+        Nothing -> getDefaultPokemon (Array.fromList UsageData.selectTop50Pokemon)
 
 
 getDefaultPokemon : Array.Array Pokemon -> Pokemon

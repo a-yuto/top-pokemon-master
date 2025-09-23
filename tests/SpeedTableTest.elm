@@ -3,7 +3,7 @@ module SpeedTableTest exposing (..)
 import Expect
 import Test exposing (..)
 import Pokemon.Types exposing (Pokemon, Stats, PokemonType(..))
-import Route.SpeedTable exposing (calculateSpeedForConfiguration, SpeedConfiguration(..))
+import Route.SpeedTable exposing (calculateSpeedForConfiguration, SpeedConfiguration(..), truncatePokemonName, calculatePositionSimple, findMinSpeedSimple, findMaxSpeedSimple, assignVerticalOffsetsSimple, calculateBaseStat, SimpleSpeedData)
 
 
 suite : Test
@@ -102,9 +102,129 @@ suite =
                         testPokemon = createTestPokemonWithSpeed 1
                         configurations = [BaseEV0, MaxEV252, MaxEVWithNature, MaxEVWithNatureAndItem]
                         speeds = List.map (calculateSpeedForConfiguration testPokemon) configurations
-                        allPositive = List.all (\speed -> speed > 0) speeds
+                        allPositive = List.all isPositiveSpeed speeds
                     in
                     Expect.equal True allPositive
+            ]
+
+        , describe "truncatePokemonName"
+            [ test "truncates name to 2 characters in compact mode" <|
+                \_ ->
+                    Expect.equal "ガブ" (truncatePokemonName True "ガブリアス")
+
+            , test "does not truncate name in normal mode" <|
+                \_ ->
+                    Expect.equal "ガブリアス" (truncatePokemonName False "ガブリアス")
+
+            , test "handles short names correctly in compact mode" <|
+                \_ ->
+                    Expect.equal "ピ" (truncatePokemonName True "ピ")
+
+            , test "handles empty string" <|
+                \_ ->
+                    Expect.equal "" (truncatePokemonName True "")
+            ]
+
+        , describe "calculatePositionSimple"
+            [ test "calculates 0% position for minimum speed" <|
+                \_ ->
+                    Expect.equal 0.0 (calculatePositionSimple 50 50 100)
+
+            , test "calculates 100% position for maximum speed" <|
+                \_ ->
+                    Expect.equal 100.0 (calculatePositionSimple 100 50 100)
+
+            , test "calculates 50% position for middle speed" <|
+                \_ ->
+                    Expect.equal 50.0 (calculatePositionSimple 75 50 100)
+
+            , test "handles equal min and max speeds" <|
+                \_ ->
+                    Expect.equal 50.0 (calculatePositionSimple 80 80 80)
+            ]
+
+        , describe "findMinSpeedSimple and findMaxSpeedSimple"
+            [ test "finds minimum speed correctly" <|
+                \_ ->
+                    let
+                        speedData = createTestSpeedDataList
+                        minSpeed = findMinSpeedSimple speedData
+                    in
+                    Expect.equal 5 minSpeed
+
+            , test "finds maximum speed correctly" <|
+                \_ ->
+                    let
+                        speedData = createTestSpeedDataList
+                        maxSpeed = findMaxSpeedSimple speedData
+                    in
+                    Expect.equal 160 maxSpeed
+
+            , test "handles empty list with default values" <|
+                \_ ->
+                    let
+                        emptyList = []
+                        minSpeed = findMinSpeedSimple emptyList
+                        maxSpeed = findMaxSpeedSimple emptyList
+                    in
+                    let
+                        isMinCorrect = minSpeed == 0
+                        isMaxCorrect = maxSpeed == 200
+                        bothCorrect = isMinCorrect && isMaxCorrect
+                    in
+                    Expect.equal True bothCorrect
+            ]
+
+        , describe "assignVerticalOffsetsSimple"
+            [ test "assigns offsets to overlapping Pokemon" <|
+                \_ ->
+                    let
+                        duplicateSpeedData = createDuplicateSpeedData
+                        withOffsets = assignVerticalOffsetsSimple duplicateSpeedData
+                        offsetList = List.map getVerticalOffset withOffsets
+                        expectedOffsets = [0, 25]
+                    in
+                    Expect.equal expectedOffsets offsetList
+
+            , test "handles single Pokemon without duplicates" <|
+                \_ ->
+                    let
+                        singleData = [createSimpleSpeedData createTestGarchomp 102]
+                        withOffsets = assignVerticalOffsetsSimple singleData
+                        garchomp = getFirstSimpleSpeedData withOffsets
+                    in
+                    case garchomp of
+                        Just pokemon ->
+                            Expect.equal 0 pokemon.verticalOffset
+
+                        Nothing ->
+                            Expect.fail "Expected at least one Pokemon"
+            ]
+
+        , describe "calculateBaseStat"
+            [ test "calculates base stat correctly for level 50" <|
+                \_ ->
+                    let
+                        result = calculateBaseStat 100 31 252 50 1.1 1.5
+                        expectedCalculation = round (toFloat (((100 * 2 + 31 + (252 // 4)) * 50) // 100 + 5) * 1.1 * 1.5)
+                    in
+                    Expect.equal expectedCalculation result
+
+            , test "calculates with no nature or item multiplier" <|
+                \_ ->
+                    let
+                        result = calculateBaseStat 100 31 0 50 1.0 1.0
+                        expectedCalculation = ((100 * 2 + 31 + 0) * 50) // 100 + 5
+                    in
+                    Expect.equal expectedCalculation result
+
+            , test "handles minimum base stat" <|
+                \_ ->
+                    let
+                        result = calculateBaseStat 1 0 0 50 1.0 1.0
+                        expectedMinimum = ((1 * 2 + 0 + 0) * 50) // 100 + 5
+                    in
+                    Expect.equal expectedMinimum result
             ]
         ]
 
@@ -201,3 +321,76 @@ createTestPokemonWithSpeed speedStat =
     , preEvolutionId = Nothing
     , evolutionMethods = []
     }
+
+
+-- Additional helper functions for new tests
+createTestSpeedDataList : List SimpleSpeedData
+createTestSpeedDataList =
+    [ createSimpleSpeedData createTestGarchomp 102
+    , createSimpleSpeedData createTestShuckle 5
+    , createSimpleSpeedData createTestNinjask 160
+    , createSimpleSpeedData (createTestPokemonWithSpeed 50) 50
+    , createSimpleSpeedData (createTestPokemonWithSpeed 150) 150
+    ]
+
+
+createSimpleSpeedData : Pokemon -> Int -> SimpleSpeedData
+createSimpleSpeedData pokemon speed =
+    { pokemon = pokemon
+    , speed = speed
+    , verticalOffset = 0
+    }
+
+
+createDuplicateSpeedData : List SimpleSpeedData
+createDuplicateSpeedData =
+    [ createSimpleSpeedData createTestGarchomp 100
+    , createSimpleSpeedData createTestDragonite 100
+    ]
+
+
+createTestDragonite : Pokemon
+createTestDragonite =
+    { id = 149
+    , name = "カイリュー"
+    , englishName = "Dragonite"
+    , pokemonType = FlyingDragon
+    , stats = Stats 91 134 95 100 100 80
+    , preEvolutionId = Nothing
+    , evolutionMethods = []
+    }
+
+
+getOffsetForPokemon : String -> List SimpleSpeedData -> Int
+getOffsetForPokemon targetName speedDataList =
+    case List.filter (hasSameName targetName) speedDataList of
+        first :: _ ->
+            first.verticalOffset
+
+        [] ->
+            -1
+
+
+hasSameName : String -> SimpleSpeedData -> Bool
+hasSameName targetName speedData =
+    speedData.pokemon.name == targetName
+
+
+getFirstSimpleSpeedData : List SimpleSpeedData -> Maybe SimpleSpeedData
+getFirstSimpleSpeedData speedDataList =
+    case speedDataList of
+        first :: _ ->
+            Just first
+
+        [] ->
+            Nothing
+
+
+isPositiveSpeed : Int -> Bool
+isPositiveSpeed speed =
+    speed > 0
+
+
+getVerticalOffset : SimpleSpeedData -> Int
+getVerticalOffset speedData =
+    speedData.verticalOffset

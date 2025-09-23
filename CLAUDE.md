@@ -5,7 +5,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## 重要
 
 ### 参照するドキュメント
-../code-guideline/code-guideline.md に必ず従いコードを記述すること。
+../code-guideline/以下にあるドキュメント に必ず従いコードを記述すること。
 
 ### 必ず守ること
 - **すべての関数に「必ず」unit testを書いてください
@@ -104,6 +104,11 @@ Elm Pagesは規約ベースのルーティングを採用：
 - **素早さクイズ** (`/speed-quiz`) - `app/Route/SpeedQuiz.elm`
   - 種族値クイズモード：ポケモンの種族値での素早さ比較
   - 実数値クイズモード：努力値・性格・持ち物を含む実数値での素早さ比較
+- **素早さ表** (`/speed-table`) - `app/Route/SpeedTable.elm`
+  - 使用率Top50ポケモンの素早さ実数値を散布図形式で表示
+  - 4つの設定での実数値比較：努力値0、努力値252、努力値252+性格1.1倍、努力値252+性格1.1倍+持ち物1.5倍
+  - 横軸に素早さ値、同速のポケモンは縦方向にずらして表示
+  - 各ポケモン名と実数値を表示
 - **ポケモン検索** (`/search`) - `app/Route/Search.elm`
 - **ポケモン図鑑一覧** (`/pokedex`) - `app/Route/Pokedex/Index.elm`
 - **個別ポケモン詳細** (`/pokedex/:id`) - `app/Route/Pokedex/Id_.elm`
@@ -270,3 +275,4 @@ Expect.equal True isInValidRange
 
 **対応済みファイル**: `WeightedRandom.elm`, `SpeedQuiz.elm`, `BattleTypes.elm`
 - ユーザーにlocalhostで確認するときは、pingでlocalhostにサーバーが建っていることを確認してからにしてください
+- タスクの完了はユニットテストがすべて通ること、静的解析が通ることは必要条件とします

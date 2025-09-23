@@ -1,4 +1,4 @@
-module Route.SpeedTable exposing (ActionData, Data, Model, Msg, route, SpeedConfiguration(..), calculateSpeedForConfiguration)
+module Route.SpeedTable exposing (ActionData, Data, Model, Msg, route, SpeedConfiguration(..), calculateSpeedForConfiguration, truncatePokemonName, calculatePositionSimple, findMinSpeedSimple, findMaxSpeedSimple, assignVerticalOffsetsSimple, calculateBaseStat, SimpleSpeedData)
 
 import BackendTask exposing (BackendTask)
 import FatalError exposing (FatalError)
@@ -6,22 +6,27 @@ import Head
 import Head.Seo as Seo
 import Html exposing (..)
 import Html.Attributes exposing (..)
+import Html.Events exposing (onClick)
 import PagesMsg exposing (PagesMsg)
-import RouteBuilder exposing (StatelessRoute, single)
+import Pages.PageUrl exposing (PageUrl)
+import RouteBuilder exposing (App)
+import Effect exposing (Effect)
+import RouteBuilder exposing (StatefulRoute, single)
 import Shared
 import View exposing (View)
 import Pokemon.Types exposing (Pokemon, Stats)
 import Pokemon.UsageData exposing (selectTop50Pokemon)
 import Pages.Url
-import UrlPath
+import UrlPath exposing (UrlPath)
 
 
 type alias Model =
-    {}
+    { isCompactMode : Bool
+    }
 
 
-type alias Msg =
-    ()
+type Msg
+    = ToggleCompactMode
 
 
 type alias RouteParams =
@@ -37,13 +42,35 @@ type alias ActionData =
     {}
 
 
-route : StatelessRoute RouteParams Data ActionData
+route : StatefulRoute RouteParams Data ActionData Model Msg
 route =
     single
         { data = data
         , head = head
         }
-        |> RouteBuilder.buildNoState { view = view }
+        |> RouteBuilder.buildWithLocalState
+            { view = view
+            , init = init
+            , update = update
+            , subscriptions = subscriptions
+            }
+
+
+init : App Data ActionData RouteParams -> Shared.Model -> ( Model, Effect Msg )
+init app shared =
+    ( { isCompactMode = False }, Effect.none )
+
+
+update : App Data ActionData RouteParams -> Shared.Model -> Msg -> Model -> ( Model, Effect Msg )
+update app shared msg model =
+    case msg of
+        ToggleCompactMode ->
+            ( { model | isCompactMode = not model.isCompactMode }, Effect.none )
+
+
+subscriptions : RouteParams -> UrlPath -> Shared.Model -> Model -> Sub Msg
+subscriptions routeParams urlPath shared model =
+    Sub.none
 
 
 data : BackendTask FatalError Data
@@ -52,7 +79,7 @@ data =
 
 
 head :
-    RouteBuilder.App Data ActionData RouteParams
+    App Data ActionData RouteParams
     -> List Head.Tag
 head static =
     Seo.summary
@@ -72,12 +99,13 @@ head static =
 
 
 view :
-    RouteBuilder.App Data ActionData RouteParams
+    App Data ActionData RouteParams
     -> Shared.Model
+    -> Model
     -> View (PagesMsg Msg)
-view static shared =
+view static shared model =
     { title = "Speed Comparison Table"
-    , body = [ viewSpeedTable static.data.pokemon ]
+    , body = [ viewSpeedTable model static.data.pokemon ]
     }
 
 
@@ -88,8 +116,8 @@ type SpeedConfiguration
     | MaxEVWithNatureAndItem
 
 
-viewSpeedTable : List Pokemon -> Html (PagesMsg Msg)
-viewSpeedTable pokemonList =
+viewSpeedTable : Model -> List Pokemon -> Html (PagesMsg Msg)
+viewSpeedTable model pokemonList =
     let
         baseEV0Data = List.map createBaseEV0SpeedData pokemonList
         maxEV252Data = List.map createMaxEV252SpeedData pokemonList
@@ -113,8 +141,25 @@ viewSpeedTable pokemonList =
     div [ class "speed-scatter-container" ]
         [ h1 [] [ text "Speed Scatter Plot" ]
         , p [] [ text "素早さ実数値の散布図（使用率Top50）" ]
+        , viewCompactModeToggle model.isCompactMode
         , div [ class "scatter-plot-wrapper" ]
-            [ viewFourRows baseEV0WithOffset maxEV252WithOffset maxEVWithNatureWithOffset maxEVWithNatureAndItemWithOffset minSpeed maxSpeed
+            [ viewFourRows model.isCompactMode baseEV0WithOffset maxEV252WithOffset maxEVWithNatureWithOffset maxEVWithNatureAndItemWithOffset minSpeed maxSpeed
+            ]
+        ]
+
+
+viewCompactModeToggle : Bool -> Html (PagesMsg Msg)
+viewCompactModeToggle isCompactMode =
+    div [ class "compact-mode-toggle" ]
+        [ label []
+            [ input
+                [ type_ "checkbox"
+                , checked isCompactMode
+                , onClick (PagesMsg.fromMsg ToggleCompactMode)
+                ]
+                []
+            , span [ class "toggle-label" ]
+                [ text "コンパクトモード（スマホ向け）" ]
             ]
         ]
 
@@ -303,28 +348,28 @@ findMaxSpeedSimple speedDataList =
         |> Maybe.withDefault 200
 
 
-viewFourRows : List SimpleSpeedData -> List SimpleSpeedData -> List SimpleSpeedData -> List SimpleSpeedData -> Int -> Int -> Html (PagesMsg Msg)
-viewFourRows baseEV0Data maxEV252Data maxEVWithNatureData maxEVWithNatureAndItemData minSpeed maxSpeed =
+viewFourRows : Bool -> List SimpleSpeedData -> List SimpleSpeedData -> List SimpleSpeedData -> List SimpleSpeedData -> Int -> Int -> Html (PagesMsg Msg)
+viewFourRows isCompactMode baseEV0Data maxEV252Data maxEVWithNatureData maxEVWithNatureAndItemData minSpeed maxSpeed =
     div []
-        [ viewSpeedRow "努力値252 + 性格1.1倍 + 持ち物1.5倍" maxEVWithNatureAndItemData minSpeed maxSpeed
-        , viewSpeedRow "努力値252 + 性格1.1倍" maxEVWithNatureData minSpeed maxSpeed
-        , viewSpeedRow "努力値252" maxEV252Data minSpeed maxSpeed
-        , viewSpeedRow "努力値0" baseEV0Data minSpeed maxSpeed
+        [ viewSpeedRow isCompactMode "努力値252 + 性格1.1倍 + 持ち物1.5倍" maxEVWithNatureAndItemData minSpeed maxSpeed
+        , viewSpeedRow isCompactMode "努力値252 + 性格1.1倍" maxEVWithNatureData minSpeed maxSpeed
+        , viewSpeedRow isCompactMode "努力値252" maxEV252Data minSpeed maxSpeed
+        , viewSpeedRow isCompactMode "努力値0" baseEV0Data minSpeed maxSpeed
         ]
 
 
-viewTwoRows : List SimpleSpeedData -> List SimpleSpeedData -> Int -> Int -> Html (PagesMsg Msg)
-viewTwoRows baseEV0Data maxEV252Data minSpeed maxSpeed =
+viewTwoRows : Bool -> List SimpleSpeedData -> List SimpleSpeedData -> Int -> Int -> Html (PagesMsg Msg)
+viewTwoRows isCompactMode baseEV0Data maxEV252Data minSpeed maxSpeed =
     div []
-        [ viewSpeedRow "努力値252" maxEV252Data minSpeed maxSpeed
-        , viewSpeedRow "努力値0" baseEV0Data minSpeed maxSpeed
+        [ viewSpeedRow isCompactMode "努力値252" maxEV252Data minSpeed maxSpeed
+        , viewSpeedRow isCompactMode "努力値0" baseEV0Data minSpeed maxSpeed
         ]
 
 
-viewSpeedRow : String -> List SimpleSpeedData -> Int -> Int -> Html (PagesMsg Msg)
-viewSpeedRow label speedDataList minSpeed maxSpeed =
+viewSpeedRow : Bool -> String -> List SimpleSpeedData -> Int -> Int -> Html (PagesMsg Msg)
+viewSpeedRow isCompactMode label speedDataList minSpeed maxSpeed =
     let
-        pokemonElements = List.map (viewPokemonPointSimple minSpeed maxSpeed) speedDataList
+        pokemonElements = List.map (viewPokemonPointSimple isCompactMode minSpeed maxSpeed) speedDataList
     in
     div [ class "single-row-container" ]
         [ div [ class "row-label-fixed" ] [ text label ]
@@ -337,7 +382,7 @@ viewSpeedRow label speedDataList minSpeed maxSpeed =
 viewSingleRow : List SimpleSpeedData -> Int -> Int -> Html (PagesMsg Msg)
 viewSingleRow speedDataList minSpeed maxSpeed =
     let
-        pokemonElements = List.map (viewPokemonPointSimple minSpeed maxSpeed) speedDataList
+        pokemonElements = List.map (viewPokemonPointSimple False minSpeed maxSpeed) speedDataList
     in
     div [ class "single-row-container" ]
         [ div [ class "row-label-fixed" ] [ text "努力値0" ]
@@ -347,22 +392,37 @@ viewSingleRow speedDataList minSpeed maxSpeed =
         ]
 
 
-viewPokemonPointSimple : Int -> Int -> SimpleSpeedData -> Html (PagesMsg Msg)
-viewPokemonPointSimple minSpeed maxSpeed speedData =
+viewPokemonPointSimple : Bool -> Int -> Int -> SimpleSpeedData -> Html (PagesMsg Msg)
+viewPokemonPointSimple isCompactMode minSpeed maxSpeed speedData =
     let
         horizontalPosition = calculatePositionSimple speedData.speed minSpeed maxSpeed
         verticalOffset = speedData.verticalOffset
+        displayName = truncatePokemonName isCompactMode speedData.pokemon.name
+        compactClass =
+            if isCompactMode then
+                "pokemon-point compact"
+            else
+                "pokemon-point"
     in
     div
-        [ class "pokemon-point"
+        [ class compactClass
         , style "left" (String.fromFloat horizontalPosition ++ "%")
         , style "top" ("calc(50% + " ++ String.fromInt verticalOffset ++ "px)")
         , style "transform" "translateY(-50%) translateX(-50%)"
         , title (speedData.pokemon.name ++ " (" ++ String.fromInt speedData.speed ++ " - offset: " ++ String.fromInt verticalOffset ++ ")")
         ]
-        [ div [ class "pokemon-name" ] [ text speedData.pokemon.name ]
+        [ div [ class "pokemon-name" ] [ text displayName ]
         , div [ class "pokemon-speed" ] [ text (String.fromInt speedData.speed) ]
+        , div [ class "pokemon-base-speed" ] [ text ("(" ++ String.fromInt speedData.pokemon.stats.speed ++ ")") ]
         ]
+
+
+truncatePokemonName : Bool -> String -> String
+truncatePokemonName isCompactMode name =
+    if isCompactMode then
+        String.left 2 name
+    else
+        name
 
 
 calculatePositionSimple : Int -> Int -> Int -> Float
