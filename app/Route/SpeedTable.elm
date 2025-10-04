@@ -159,7 +159,7 @@ viewCompactModeToggle isCompactMode =
                 ]
                 []
             , span [ class "toggle-label" ]
-                [ text "コンパクトモード（スマホ向け）" ]
+                [ text "名前を短縮表示" ]
             ]
         ]
 
@@ -369,7 +369,8 @@ viewTwoRows isCompactMode baseEV0Data maxEV252Data minSpeed maxSpeed =
 viewSpeedRow : Bool -> String -> List SimpleSpeedData -> Int -> Int -> Html (PagesMsg Msg)
 viewSpeedRow isCompactMode label speedDataList minSpeed maxSpeed =
     let
-        pokemonElements = List.map (viewPokemonPointSimple isCompactMode minSpeed maxSpeed) speedDataList
+        sortedSpeedData = List.sortBy .speed speedDataList |> List.reverse
+        pokemonElements = List.map (viewPokemonPointSimple isCompactMode minSpeed maxSpeed) sortedSpeedData
     in
     div [ class "single-row-container" ]
         [ div [ class "row-label-fixed" ] [ text label ]

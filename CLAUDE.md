@@ -36,7 +36,7 @@ result =
 ## 開発のヒント
 - Elmは静的解析が強力な言語です。動的な実行確認をする前に静的な確認を必ず行って下さい。
 - 新しいページを追加する場合は`app/Route/`にElmファイルを作成
-- スタイルは`style.css`で管理（`/public`から提供）
+- スタイルは`public/style.css`で管理（ルートのstyle.cssは使用しない）
 - BackendTaskを使用してビルド時にデータを取得可能
 - カスタムバックエンドタスクは`custom-backend-task.ts`で定義
 - 実装は省略せずに行ってください。タイプが関わる記述は大変ですが、省略は厳禁です。
@@ -69,10 +69,15 @@ result =
 - `public/` - 静的アセット（画像、フォントなど）
 - `functions/` - Netlify Functions（サーバーレス関数）
 - `dist/` - ビルド出力ディレクトリ
-- `tests/` - ユニットテストファイル
+- `tests/` - ユニットテストファイル（13ファイル、136テスト）
   - `tests/PokemonDataTest.elm` - ポケモンデータ関数のテスト
   - `tests/MoveDataTest.elm` - 技データ関数のテスト
-  - `tests/Example.elm` - 基本的なサンプルテスト
+  - `tests/WeightedRandomTest.elm` - 重み付きランダム選択のテスト
+  - `tests/SpeedQuizIntegrationTest.elm` - SpeedQuizの統合テスト
+  - `tests/BattleTypesTest.elm` - バトル用型のテスト
+  - `tests/AbilityDataTest.elm` - 特性データのテスト
+  - `tests/SpeedTableTest.elm` - 素早さ表のテスト
+  - その他のテストファイル
 
 ### ルーティングシステム
 Elm Pagesは規約ベースのルーティングを採用：
@@ -112,6 +117,7 @@ Elm Pagesは規約ベースのルーティングを採用：
 - **ポケモン検索** (`/search`) - `app/Route/Search.elm`
 - **ポケモン図鑑一覧** (`/pokedex`) - `app/Route/Pokedex/Index.elm`
 - **個別ポケモン詳細** (`/pokedex/:id`) - `app/Route/Pokedex/Id_.elm`
+- **挨拶ページ** (`/greet`) - `app/Route/Greet.elm`
 
 ### ポケモンデータアーキテクチャ
 
@@ -274,5 +280,74 @@ Expect.equal True isInValidRange
   - 問題マーカー: `-- FixMe: データ不整合時のハードコードされたフォールバック`
 
 **対応済みファイル**: `WeightedRandom.elm`, `SpeedQuiz.elm`, `BattleTypes.elm`
+
+### モバイル対応（2025年9月実施）
+**素早さ表（SpeedTable）のレスポンシブ対応を実装済み**
+- 768px以下でグリッドレイアウトに変更
+- 固定幅3000pxを廃止し、可変幅レイアウトに変更
+- スマートフォンでの横スクロール問題を解決
+- 素早さ順にソート表示（高い順）
+- タッチ操作に最適化したUIサイズ
+
+### GitHub Issue管理
+**issueテンプレートの整備（2025年9月実施）**
+- `docs/github-issue-template.md` - 標準化されたissueテンプレートを作成
+- issue #3（実数値クイズ問題）を基にテンプレートを設計
+- 「要件を詰める項目」セクションで実装前の仕様明確化を促進
+- チェックボックス形式で議論の進捗を可視化
+
+**GitHub Projects「Pokemon Project」の運用**
+プロジェクト管理のためのステータス管理システムを導入：
+
+1. **Just Idea** - テンプレートに従っていないissue
+   - 新規作成されたissue
+   - テンプレートに沿って内容を整理し、Ready to Implementに移動
+
+2. **Ready To Implement** - テンプレートに従っているissue
+   - 実装に着手できる状態
+   - 要件が明確化され、技術的詳細が記載済み
+
+3. **In Progress** - 実装中のもの
+   - 開発者がアサインされ、実装作業が進行中
+
+4. **Awaiting Human Review** - 実装完了、人間のレビュー待ち
+   - 実装が完了し、人間によるレビューを待っている状態
+   - レビュー完了後はDoneに移動
+   - 修正が必要な場合は別の新しいissueを作成
+
+5. **Done** - 完了したissue
+   - レビューも含めて全ての作業が完了
+
+6. **Do Not But Resolved** - 実装不要で解決済み
+   - issueは作成されたが、他の方法で問題が解決
+   - 実装を行わずに完了扱い
+
+**チケット分解のガイドライン**
+大規模なissueの実装前に以下の基準でチケット分解を検討：
+
+**分解判定基準**:
+- 実装で3ファイル以上の修正・作成が必要になりそうな場合
+
+**分解時のルール**:
+1. **ファイル数制限**: 一つのチケットで修正するファイル数は2以下
+2. **依存関係最小化**: チケット間の依存関係を最小限に抑える
+3. **依存関係の明記**: 依存関係がある場合は各チケットで明確に記載
+
+**分解例**:
+```
+元: ポケモン検索機能 (3ファイル以上)
+↓
+分解後:
+- チケットA: 検索ロジックの実装 (SearchEngine.elm)
+- チケットB: 検索UIの実装 (Search.elm)
+- チケットC: 検索結果表示の実装 (SearchResult.elm)
+  依存: チケットA、B完了後
+```
+
+### 既知の問題
+- **実数値クイズモードの問題**: speed-quizページで実数値が表示されクイズになっていない（GitHub issue作成済み）
+  - 該当箇所: `app/Route/SpeedQuiz.elm`の389行目
+  - 修正対象: `viewBattleKataButton`関数
+
 - ユーザーにlocalhostで確認するときは、pingでlocalhostにサーバーが建っていることを確認してからにしてください
 - タスクの完了はユニットテストがすべて通ること、静的解析が通ることは必要条件とします
