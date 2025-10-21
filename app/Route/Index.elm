@@ -57,16 +57,16 @@ head :
 head app =
     Seo.summary
         { canonicalUrlOverride = Nothing
-        , siteName = "elm-pages"
+        , siteName = "Top Pokemon Master"
         , image =
             { url = Pages.Url.fromPath (UrlPath.join [ "images", "icon-png.png" ])
-            , alt = "elm-pages logo"
+            , alt = "Top Pokemon Master"
             , dimensions = Nothing
             , mimeType = Nothing
             }
-        , description = "Welcome to elm-pages!"
+        , description = "ポケモン対戦の素早さ判定を学べるツール集"
         , locale = Nothing
-        , title = "elm-pages is running"
+        , title = "Top Pokemon Master"
         }
         |> Seo.website
 
@@ -76,13 +76,34 @@ view :
     -> Shared.Model
     -> View (PagesMsg Msg)
 view app shared =
-    { title = "elm-pages is running"
+    { title = "Top Pokemon Master"
     , body =
-        [ Html.h1 [] [ Html.text "elm-pages is up and running!" ]
+        [ Html.h1 [] [ Html.text "Top Pokemon Master" ]
         , Html.p []
-            [ Html.text <| "The message is: " ++ app.data.message
+            [ Html.text "ポケモン対戦の素早さ判定を学べるツール集"
             ]
-        , Route.Blog__Slug_ { slug = "hello" }
-            |> Route.link [] [ Html.text "My blog post" ]
+        , Html.h2 [] [ Html.text "ツール一覧" ]
+        , Html.ul []
+            [ Html.li []
+                [ Route.SpeedQuiz
+                    |> Route.link [] [ Html.text "素早さクイズ" ]
+                , Html.text " - 種族値・実数値での素早さ比較クイズ"
+                ]
+            , Html.li []
+                [ Route.SpeedTable
+                    |> Route.link [] [ Html.text "素早さ表" ]
+                , Html.text " - 使用率Top50ポケモンの素早さ散布図"
+                ]
+            , Html.li []
+                [ Route.Search
+                    |> Route.link [] [ Html.text "ポケモン検索" ]
+                , Html.text " - ポケモンを検索"
+                ]
+            , Html.li []
+                [ Route.Pokedex
+                    |> Route.link [] [ Html.text "ポケモン図鑑" ]
+                , Html.text " - 全ポケモンの図鑑一覧"
+                ]
+            ]
         ]
     }
