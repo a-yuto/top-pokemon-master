@@ -1,23 +1,38 @@
-module Route.SpeedTable exposing (ActionData, Data, Model, Msg, route, SpeedConfiguration(..), calculateSpeedForConfiguration, truncatePokemonName, calculatePositionSimple, findMinSpeedSimple, findMaxSpeedSimple, assignVerticalOffsetsSimple, calculateBaseStat, SimpleSpeedData)
+module Route.SpeedTable exposing
+    ( ActionData
+    , Data
+    , Model
+    , Msg
+    , SimpleSpeedData
+    , SpeedConfiguration(..)
+    , assignHorizontalOffsetsSimple
+    , calculateBaseStat
+    , calculateHorizontalOffset
+    , calculateSpeedForConfiguration
+    , calculateVerticalPosition
+    , findMaxSpeedSimple
+    , findMinSpeedSimple
+    , route
+    , truncatePokemonName
+    )
 
 import BackendTask exposing (BackendTask)
+import Dict exposing (Dict)
+import Effect exposing (Effect)
 import FatalError exposing (FatalError)
 import Head
 import Head.Seo as Seo
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (onClick)
-import PagesMsg exposing (PagesMsg)
-import Pages.PageUrl exposing (PageUrl)
-import RouteBuilder exposing (App)
-import Effect exposing (Effect)
-import RouteBuilder exposing (StatefulRoute, single)
-import Shared
-import View exposing (View)
-import Pokemon.Types exposing (Pokemon, Stats)
-import Pokemon.UsageData exposing (selectTop50Pokemon)
 import Pages.Url
+import PagesMsg exposing (PagesMsg)
+import Pokemon.Types exposing (Pokemon)
+import Pokemon.UsageData exposing (selectTop50Pokemon)
+import RouteBuilder exposing (App, StatefulRoute, single)
+import Shared
 import UrlPath exposing (UrlPath)
+import View exposing (View)
 
 
 type alias Model =
@@ -42,34 +57,59 @@ type alias ActionData =
     {}
 
 
+type alias SimpleSpeedData =
+    { pokemon : Pokemon
+    , speed : Int
+    , baseSpeed : Int
+    , horizontalOffset : Int
+    }
+
+
+type alias ColumnDefinition =
+    { label : String
+    , speedData : List SimpleSpeedData
+    }
+
+
+type SpeedConfiguration
+    = BaseEV0
+    | MaxEV252
+    | MaxEVWithNature
+    | MaxEVWithNatureAndItem
+
+
 route : StatefulRoute RouteParams Data ActionData Model Msg
 route =
-    single
-        { data = data
-        , head = head
+    let
+        definition =
+            single
+                { data = data
+                , head = head
+                }
+    in
+    RouteBuilder.buildWithLocalState
+        { view = view
+        , init = init
+        , update = update
+        , subscriptions = subscriptions
         }
-        |> RouteBuilder.buildWithLocalState
-            { view = view
-            , init = init
-            , update = update
-            , subscriptions = subscriptions
-            }
+        definition
 
 
 init : App Data ActionData RouteParams -> Shared.Model -> ( Model, Effect Msg )
-init app shared =
+init _ _ =
     ( { isCompactMode = False }, Effect.none )
 
 
 update : App Data ActionData RouteParams -> Shared.Model -> Msg -> Model -> ( Model, Effect Msg )
-update app shared msg model =
+update _ _ msg model =
     case msg of
         ToggleCompactMode ->
             ( { model | isCompactMode = not model.isCompactMode }, Effect.none )
 
 
 subscriptions : RouteParams -> UrlPath -> Shared.Model -> Model -> Sub Msg
-subscriptions routeParams urlPath shared model =
+subscriptions _ _ _ _ =
     Sub.none
 
 
@@ -81,21 +121,24 @@ data =
 head :
     App Data ActionData RouteParams
     -> List Head.Tag
-head static =
-    Seo.summary
-        { canonicalUrlOverride = Nothing
-        , siteName = "Pokemon Master"
-        , image =
-            { url = Pages.Url.fromPath (UrlPath.join [ "images", "icon-png.png" ])
-            , alt = "Speed Comparison Table"
-            , dimensions = Nothing
-            , mimeType = Nothing
-            }
-        , description = "Compare Pokemon speed stats with different configurations"
-        , locale = Nothing
-        , title = "Speed Comparison Table - Pokemon Master"
-        }
-        |> Seo.website
+head _ =
+    let
+        summary =
+            Seo.summary
+                { canonicalUrlOverride = Nothing
+                , siteName = "Pokemon Master"
+                , image =
+                    { url = Pages.Url.fromPath (UrlPath.join [ "images", "icon-png.png" ])
+                    , alt = "Speed Comparison"
+                    , dimensions = Nothing
+                    , mimeType = Nothing
+                    }
+                , description = "Compare Pokemon speed stats for multiple configurations."
+                , locale = Nothing
+                , title = "Speed Comparison - Pokemon Master"
+                }
+    in
+    Seo.website summary
 
 
 view :
@@ -103,48 +146,36 @@ view :
     -> Shared.Model
     -> Model
     -> View (PagesMsg Msg)
-view static shared model =
-    { title = "Speed Comparison Table"
-    , body = [ viewSpeedTable model static.data.pokemon ]
+view static _ model =
+    { title = "Speed Comparison"
+    , body = [ viewSpeedComparison model static.data.pokemon ]
     }
 
 
-type SpeedConfiguration
-    = BaseEV0
-    | MaxEV252
-    | MaxEVWithNature
-    | MaxEVWithNatureAndItem
-
-
-viewSpeedTable : Model -> List Pokemon -> Html (PagesMsg Msg)
-viewSpeedTable model pokemonList =
+viewSpeedComparison : Model -> List Pokemon -> Html (PagesMsg Msg)
+viewSpeedComparison model pokemonList =
     let
-        baseEV0Data = List.map createBaseEV0SpeedData pokemonList
-        maxEV252Data = List.map createMaxEV252SpeedData pokemonList
-        maxEVWithNatureData = List.map createMaxEVWithNatureSpeedData pokemonList
-        maxEVWithNatureAndItemData = List.map createMaxEVWithNatureAndItemSpeedData pokemonList
-
-        baseEV0WithOffset = assignVerticalOffsetsSimple baseEV0Data
-        maxEV252WithOffset = assignVerticalOffsetsSimple maxEV252Data
-        maxEVWithNatureWithOffset = assignVerticalOffsetsSimple maxEVWithNatureData
-        maxEVWithNatureAndItemWithOffset = assignVerticalOffsetsSimple maxEVWithNatureAndItemData
-
-        allSpeeds = List.concat
-            [ List.map .speed baseEV0WithOffset
-            , List.map .speed maxEV252WithOffset
-            , List.map .speed maxEVWithNatureWithOffset
-            , List.map .speed maxEVWithNatureAndItemWithOffset
+        baseEV0Column = createColumnDefinition "努力値0" (createBaseEV0ColumnData pokemonList)
+        maxEV252Column = createColumnDefinition "努力値252" (createMaxEV252ColumnData pokemonList)
+        maxEVWithNatureColumn = createColumnDefinition "努力値252 性格1.1倍" (createMaxEVWithNatureColumnData pokemonList)
+        maxEVWithNatureAndItemColumn = createColumnDefinition "努力値252 性格1.1倍 持ち物1.5倍" (createMaxEVWithNatureAndItemColumnData pokemonList)
+        columnList =
+            [ baseEV0Column
+            , maxEV252Column
+            , maxEVWithNatureColumn
+            , maxEVWithNatureAndItemColumn
             ]
-        minSpeed = List.minimum allSpeeds |> Maybe.withDefault 0
-        maxSpeed = List.maximum allSpeeds |> Maybe.withDefault 200
+        minSpeed = determineOverallMinimum columnList
+        maxSpeed = determineOverallMaximum columnList
+        axisTicks = generateAxisTicks minSpeed maxSpeed
+        columnViews = buildColumnViews model.isCompactMode minSpeed maxSpeed axisTicks columnList
     in
-    div [ class "speed-scatter-container" ]
-        [ h1 [] [ text "Speed Scatter Plot" ]
-        , p [] [ text "素早さ実数値の散布図（使用率Top50）" ]
+    div [ class "speed-comparison-container" ]
+        [ h1 [] [ text "Speed Comparison Board" ]
+        , p [] [ text "使用率上位50匹の素早さを4種類の設定で縦方向に比較できます。" ]
         , viewCompactModeToggle model.isCompactMode
-        , div [ class "scatter-plot-wrapper" ]
-            [ viewFourRows model.isCompactMode baseEV0WithOffset maxEV252WithOffset maxEVWithNatureWithOffset maxEVWithNatureAndItemWithOffset minSpeed maxSpeed
-            ]
+        , div [ class "speed-comparison-visual" ]
+            (viewSpeedAxis minSpeed maxSpeed axisTicks :: columnViews)
         ]
 
 
@@ -158,247 +189,126 @@ viewCompactModeToggle isCompactMode =
                 , onClick (PagesMsg.fromMsg ToggleCompactMode)
                 ]
                 []
-            , span [ class "toggle-label" ]
-                [ text "名前を短縮表示" ]
+            , span [ class "toggle-label" ] [ text "名前を短縮表示" ]
             ]
         ]
 
 
-type alias MultiSpeedData =
-    { pokemon : Pokemon
-    , baseEV0 : Int
-    , maxEV252 : Int
-    , baseEV0Offset : Int
-    , maxEV252Offset : Int
+createColumnDefinition : String -> List SimpleSpeedData -> ColumnDefinition
+createColumnDefinition label speedDataList =
+    { label = label
+    , speedData = speedDataList
     }
 
 
-type alias SimpleSpeedData =
-    { pokemon : Pokemon
-    , speed : Int
-    , verticalOffset : Int
-    }
+createBaseEV0ColumnData : List Pokemon -> List SimpleSpeedData
+createBaseEV0ColumnData pokemonList =
+    List.map createBaseEV0SpeedData pokemonList
 
 
-createMultiSpeedData : Pokemon -> MultiSpeedData
-createMultiSpeedData pokemon =
-    { pokemon = pokemon
-    , baseEV0 = calculateSpeedForConfiguration pokemon BaseEV0
-    , maxEV252 = calculateSpeedForConfiguration pokemon MaxEV252
-    , baseEV0Offset = 0
-    , maxEV252Offset = 0
-    }
+createMaxEV252ColumnData : List Pokemon -> List SimpleSpeedData
+createMaxEV252ColumnData pokemonList =
+    List.map createMaxEV252SpeedData pokemonList
 
 
-createBaseEV0SpeedData : Pokemon -> SimpleSpeedData
-createBaseEV0SpeedData pokemon =
-    { pokemon = pokemon
-    , speed = calculateSpeedForConfiguration pokemon BaseEV0
-    , verticalOffset = 0
-    }
+createMaxEVWithNatureColumnData : List Pokemon -> List SimpleSpeedData
+createMaxEVWithNatureColumnData pokemonList =
+    List.map createMaxEVWithNatureSpeedData pokemonList
 
 
-createMaxEV252SpeedData : Pokemon -> SimpleSpeedData
-createMaxEV252SpeedData pokemon =
-    { pokemon = pokemon
-    , speed = calculateSpeedForConfiguration pokemon MaxEV252
-    , verticalOffset = 0
-    }
+createMaxEVWithNatureAndItemColumnData : List Pokemon -> List SimpleSpeedData
+createMaxEVWithNatureAndItemColumnData pokemonList =
+    List.map createMaxEVWithNatureAndItemSpeedData pokemonList
 
 
-createMaxEVWithNatureSpeedData : Pokemon -> SimpleSpeedData
-createMaxEVWithNatureSpeedData pokemon =
-    { pokemon = pokemon
-    , speed = calculateSpeedForConfiguration pokemon MaxEVWithNature
-    , verticalOffset = 0
-    }
+buildColumnViews : Bool -> Int -> Int -> List Int -> List ColumnDefinition -> List (Html (PagesMsg Msg))
+buildColumnViews isCompactMode minSpeed maxSpeed axisTicks columnDefinitions =
+    List.map (buildColumnView isCompactMode minSpeed maxSpeed axisTicks) columnDefinitions
 
 
-createMaxEVWithNatureAndItemSpeedData : Pokemon -> SimpleSpeedData
-createMaxEVWithNatureAndItemSpeedData pokemon =
-    { pokemon = pokemon
-    , speed = calculateSpeedForConfiguration pokemon MaxEVWithNatureAndItem
-    , verticalOffset = 0
-    }
+buildColumnView : Bool -> Int -> Int -> List Int -> ColumnDefinition -> Html (PagesMsg Msg)
+buildColumnView isCompactMode minSpeed maxSpeed axisTicks columnDefinition =
+    viewSpeedColumn isCompactMode columnDefinition minSpeed maxSpeed axisTicks
 
 
-assignVerticalOffsetsSimple : List SimpleSpeedData -> List SimpleSpeedData
-assignVerticalOffsetsSimple speedDataList =
+viewSpeedAxis : Int -> Int -> List Int -> Html msg
+viewSpeedAxis minSpeed maxSpeed axisTicks =
     let
-        groupedBySpeed = groupBySpeedSimple speedDataList
-        withOffsets = List.concatMap assignOffsetsToGroupSimple groupedBySpeed
+        tickViews = List.map (viewAxisTick minSpeed maxSpeed) axisTicks
     in
-    withOffsets
+    div [ class "speed-axis" ]
+        tickViews
 
 
-groupBySpeedSimple : List SimpleSpeedData -> List (List SimpleSpeedData)
-groupBySpeedSimple speedDataList =
+viewAxisTick : Int -> Int -> Int -> Html msg
+viewAxisTick minSpeed maxSpeed tickValue =
     let
-        sortedData = List.sortBy .speed speedDataList
-        groupHelper currentSpeed currentGroup groups remainingData =
-            case remainingData of
-                [] ->
-                    if List.isEmpty currentGroup then
-                        groups
-                    else
-                        currentGroup :: groups
-
-                first :: rest ->
-                    if first.speed == currentSpeed then
-                        groupHelper currentSpeed (first :: currentGroup) groups rest
-                    else
-                        let
-                            newGroups =
-                                if List.isEmpty currentGroup then
-                                    groups
-                                else
-                                    currentGroup :: groups
-                        in
-                        groupHelper first.speed [first] newGroups rest
+        position = calculateVerticalPosition tickValue minSpeed maxSpeed
+        positionText = String.fromFloat position ++ "%"
+        tickLabel = String.fromInt tickValue
     in
-    case sortedData of
-        [] ->
-            []
-
-        first :: rest ->
-            groupHelper first.speed [first] [] rest
-
-
-assignOffsetsToGroupSimple : List SimpleSpeedData -> List SimpleSpeedData
-assignOffsetsToGroupSimple group =
-    List.indexedMap (\index item -> { item | verticalOffset = index * 25 }) group
-
-
-assignMultipleVerticalOffsets : List MultiSpeedData -> List MultiSpeedData
-assignMultipleVerticalOffsets speedDataList =
-    let
-        baseEV0GroupedBySpeed = groupBySpeedMulti .baseEV0 speedDataList
-        maxEV252GroupedBySpeed = groupBySpeedMulti .maxEV252 speedDataList
-
-        withBaseEV0Offsets = List.concatMap (assignOffsetsToGroupMulti .baseEV0 updateBaseEV0Offset) baseEV0GroupedBySpeed
-        withAllOffsets = List.concatMap (assignOffsetsToGroupMulti .maxEV252 updateMaxEV252Offset) maxEV252GroupedBySpeed
-    in
-    mergeOffsets withBaseEV0Offsets withAllOffsets speedDataList
-
-
-groupBySpeedMulti : (MultiSpeedData -> Int) -> List MultiSpeedData -> List (List MultiSpeedData)
-groupBySpeedMulti speedSelector speedDataList =
-    let
-        sortedData = List.sortBy speedSelector speedDataList
-        groupHelper currentSpeed currentGroup groups remainingData =
-            case remainingData of
-                [] ->
-                    if List.isEmpty currentGroup then
-                        groups
-                    else
-                        currentGroup :: groups
-
-                first :: rest ->
-                    if speedSelector first == currentSpeed then
-                        groupHelper currentSpeed (first :: currentGroup) groups rest
-                    else
-                        let
-                            newGroups =
-                                if List.isEmpty currentGroup then
-                                    groups
-                                else
-                                    currentGroup :: groups
-                        in
-                        groupHelper (speedSelector first) [first] newGroups rest
-    in
-    case sortedData of
-        [] ->
-            []
-
-        first :: rest ->
-            groupHelper (speedSelector first) [first] [] rest
-
-
-assignOffsetsToGroupMulti : (MultiSpeedData -> Int) -> (Int -> MultiSpeedData -> MultiSpeedData) -> List MultiSpeedData -> List MultiSpeedData
-assignOffsetsToGroupMulti speedSelector offsetUpdater group =
-    List.indexedMap (\index item -> offsetUpdater (index * 25) item) group
-
-
-updateBaseEV0Offset : Int -> MultiSpeedData -> MultiSpeedData
-updateBaseEV0Offset offset speedData =
-    { speedData | baseEV0Offset = offset }
-
-
-updateMaxEV252Offset : Int -> MultiSpeedData -> MultiSpeedData
-updateMaxEV252Offset offset speedData =
-    { speedData | maxEV252Offset = offset }
-
-
-mergeOffsets : List MultiSpeedData -> List MultiSpeedData -> List MultiSpeedData -> List MultiSpeedData
-mergeOffsets baseOffsets maxOffsets originalData =
-    originalData
-
-
-findMinSpeedSimple : List SimpleSpeedData -> Int
-findMinSpeedSimple speedDataList =
-    List.map .speed speedDataList
-        |> List.minimum
-        |> Maybe.withDefault 0
-
-
-findMaxSpeedSimple : List SimpleSpeedData -> Int
-findMaxSpeedSimple speedDataList =
-    List.map .speed speedDataList
-        |> List.maximum
-        |> Maybe.withDefault 200
-
-
-viewFourRows : Bool -> List SimpleSpeedData -> List SimpleSpeedData -> List SimpleSpeedData -> List SimpleSpeedData -> Int -> Int -> Html (PagesMsg Msg)
-viewFourRows isCompactMode baseEV0Data maxEV252Data maxEVWithNatureData maxEVWithNatureAndItemData minSpeed maxSpeed =
-    div []
-        [ viewSpeedRow isCompactMode "努力値252 + 性格1.1倍 + 持ち物1.5倍" maxEVWithNatureAndItemData minSpeed maxSpeed
-        , viewSpeedRow isCompactMode "努力値252 + 性格1.1倍" maxEVWithNatureData minSpeed maxSpeed
-        , viewSpeedRow isCompactMode "努力値252" maxEV252Data minSpeed maxSpeed
-        , viewSpeedRow isCompactMode "努力値0" baseEV0Data minSpeed maxSpeed
+    div
+        [ class "speed-axis-tick"
+        , style "top" positionText
+        ]
+        [ span [ class "speed-axis-mark" ] []
+        , span [ class "speed-axis-label" ] [ text tickLabel ]
         ]
 
 
-viewTwoRows : Bool -> List SimpleSpeedData -> List SimpleSpeedData -> Int -> Int -> Html (PagesMsg Msg)
-viewTwoRows isCompactMode baseEV0Data maxEV252Data minSpeed maxSpeed =
-    div []
-        [ viewSpeedRow isCompactMode "努力値252" maxEV252Data minSpeed maxSpeed
-        , viewSpeedRow isCompactMode "努力値0" baseEV0Data minSpeed maxSpeed
-        ]
-
-
-viewSpeedRow : Bool -> String -> List SimpleSpeedData -> Int -> Int -> Html (PagesMsg Msg)
-viewSpeedRow isCompactMode label speedDataList minSpeed maxSpeed =
+viewSpeedColumn : Bool -> ColumnDefinition -> Int -> Int -> List Int -> Html (PagesMsg Msg)
+viewSpeedColumn isCompactMode columnDefinition minSpeed maxSpeed axisTicks =
     let
-        sortedSpeedData = List.sortBy .speed speedDataList |> List.reverse
-        pokemonElements = List.map (viewPokemonPointSimple isCompactMode minSpeed maxSpeed) sortedSpeedData
+        sortedAscending = List.sortBy .speed columnDefinition.speedData
+        sortedDescending = List.reverse sortedAscending
+        withOffsets = assignHorizontalOffsetsSimple sortedDescending
+        guidelineViews = List.map (viewColumnGuideline minSpeed maxSpeed) axisTicks
+        pokemonViews = List.map (viewPokemonPointSimple isCompactMode minSpeed maxSpeed) withOffsets
     in
-    div [ class "single-row-container" ]
-        [ div [ class "row-label-fixed" ] [ text label ]
-        , div [ class "single-row" ]
-            [ div [ class "row-points" ] pokemonElements
+    div [ class "speed-column" ]
+        [ div [ class "speed-column-header" ] [ text columnDefinition.label ]
+        , div [ class "speed-column-body" ]
+            [ div [ class "speed-column-guidelines" ] guidelineViews
+            , div [ class "speed-column-points" ] pokemonViews
             ]
         ]
 
 
-viewSingleRow : List SimpleSpeedData -> Int -> Int -> Html (PagesMsg Msg)
-viewSingleRow speedDataList minSpeed maxSpeed =
+viewColumnGuideline : Int -> Int -> Int -> Html msg
+viewColumnGuideline minSpeed maxSpeed tickValue =
     let
-        pokemonElements = List.map (viewPokemonPointSimple False minSpeed maxSpeed) speedDataList
+        position = calculateVerticalPosition tickValue minSpeed maxSpeed
+        positionText = String.fromFloat position ++ "%"
     in
-    div [ class "single-row-container" ]
-        [ div [ class "row-label-fixed" ] [ text "努力値0" ]
-        , div [ class "single-row" ]
-            [ div [ class "row-points" ] pokemonElements
-            ]
+    div
+        [ class "speed-column-guideline"
+        , style "top" positionText
         ]
+        []
 
 
 viewPokemonPointSimple : Bool -> Int -> Int -> SimpleSpeedData -> Html (PagesMsg Msg)
 viewPokemonPointSimple isCompactMode minSpeed maxSpeed speedData =
     let
-        horizontalPosition = calculatePositionSimple speedData.speed minSpeed maxSpeed
-        verticalOffset = speedData.verticalOffset
+        verticalPosition = calculateVerticalPosition speedData.speed minSpeed maxSpeed
+        horizontalOffset = speedData.horizontalOffset
         displayName = truncatePokemonName isCompactMode speedData.pokemon.name
+        horizontalPositionText =
+            if horizontalOffset >= 0 then
+                "calc(50% + " ++ String.fromInt horizontalOffset ++ "px)"
+            else
+                "calc(50% - " ++ String.fromInt (abs horizontalOffset) ++ "px)"
+
+        tooltip =
+            speedData.pokemon.name
+                ++ " / "
+                ++ speedData.pokemon.englishName
+                ++ " : "
+                ++ String.fromInt speedData.speed
+                ++ " (基礎 "
+                ++ String.fromInt speedData.baseSpeed
+                ++ ")"
+
         compactClass =
             if isCompactMode then
                 "pokemon-point compact"
@@ -407,15 +317,278 @@ viewPokemonPointSimple isCompactMode minSpeed maxSpeed speedData =
     in
     div
         [ class compactClass
-        , style "left" (String.fromFloat horizontalPosition ++ "%")
-        , style "top" ("calc(50% + " ++ String.fromInt verticalOffset ++ "px)")
-        , style "transform" "translateY(-50%) translateX(-50%)"
-        , title (speedData.pokemon.name ++ " (" ++ String.fromInt speedData.speed ++ " - offset: " ++ String.fromInt verticalOffset ++ ")")
+        , style "top" (String.fromFloat verticalPosition ++ "%")
+        , style "left" horizontalPositionText
+        , title tooltip
         ]
         [ div [ class "pokemon-name" ] [ text displayName ]
         , div [ class "pokemon-speed" ] [ text (String.fromInt speedData.speed) ]
-        , div [ class "pokemon-base-speed" ] [ text ("(" ++ String.fromInt speedData.pokemon.stats.speed ++ ")") ]
+        , div [ class "pokemon-base-speed" ] [ text ("基礎 " ++ String.fromInt speedData.baseSpeed) ]
         ]
+
+
+createBaseEV0SpeedData : Pokemon -> SimpleSpeedData
+createBaseEV0SpeedData pokemon =
+    createSpeedDataWithConfiguration pokemon BaseEV0
+
+
+createMaxEV252SpeedData : Pokemon -> SimpleSpeedData
+createMaxEV252SpeedData pokemon =
+    createSpeedDataWithConfiguration pokemon MaxEV252
+
+
+createMaxEVWithNatureSpeedData : Pokemon -> SimpleSpeedData
+createMaxEVWithNatureSpeedData pokemon =
+    createSpeedDataWithConfiguration pokemon MaxEVWithNature
+
+
+createMaxEVWithNatureAndItemSpeedData : Pokemon -> SimpleSpeedData
+createMaxEVWithNatureAndItemSpeedData pokemon =
+    createSpeedDataWithConfiguration pokemon MaxEVWithNatureAndItem
+
+
+createSpeedDataWithConfiguration : Pokemon -> SpeedConfiguration -> SimpleSpeedData
+createSpeedDataWithConfiguration pokemon configuration =
+    { pokemon = pokemon
+    , speed = calculateSpeedForConfiguration pokemon configuration
+    , baseSpeed = pokemon.stats.speed
+    , horizontalOffset = 0
+    }
+
+
+calculateSpeedForConfiguration : Pokemon -> SpeedConfiguration -> Int
+calculateSpeedForConfiguration pokemon configuration =
+    let
+        baseSpeed = pokemon.stats.speed
+        level = 50
+        individualValue = 31
+    in
+    case configuration of
+        BaseEV0 ->
+            calculateBaseStat baseSpeed individualValue 0 level 1.0 1.0
+
+        MaxEV252 ->
+            calculateBaseStat baseSpeed individualValue 252 level 1.0 1.0
+
+        MaxEVWithNature ->
+            calculateBaseStat baseSpeed individualValue 252 level 1.1 1.0
+
+        MaxEVWithNatureAndItem ->
+            calculateBaseStat baseSpeed individualValue 252 level 1.1 1.5
+
+
+calculateBaseStat : Int -> Int -> Int -> Int -> Float -> Float -> Int
+calculateBaseStat baseStat individualValue effortValue level natureMultiplier itemMultiplier =
+    let
+        baseCalculation =
+            ((baseStat * 2 + individualValue + (effortValue // 4)) * level) // 100 + 5
+        withNature = toFloat baseCalculation * natureMultiplier
+        withItem = withNature * itemMultiplier
+    in
+    round withItem
+
+
+calculateVerticalPosition : Int -> Int -> Int -> Float
+calculateVerticalPosition speedValue minSpeed maxSpeed =
+    let
+        range = toFloat (maxSpeed - minSpeed)
+        offset = toFloat (speedValue - minSpeed)
+    in
+    if range == 0 then
+        50.0
+    else
+        100.0 - ((offset / range) * 100.0)
+
+
+assignHorizontalOffsetsSimple : List SimpleSpeedData -> List SimpleSpeedData
+assignHorizontalOffsetsSimple speedDataList =
+    let
+        groupSizes = calculateGroupSizes speedDataList
+        assignStep speedData state =
+            assignOffsetToSpeedData speedData groupSizes state
+
+        initialState =
+            ( Dict.empty, [] )
+
+        finalState =
+            List.foldl assignStep initialState speedDataList
+    in
+    case finalState of
+        ( _, reversedList ) ->
+            List.reverse reversedList
+
+
+assignOffsetToSpeedData :
+    SimpleSpeedData
+    -> Dict Int Int
+    -> ( Dict Int Int, List SimpleSpeedData )
+    -> ( Dict Int Int, List SimpleSpeedData )
+assignOffsetToSpeedData speedData groupSizes ( usedCounts, assignedList ) =
+    let
+        speedValue = speedData.speed
+        totalCount =
+            case Dict.get speedValue groupSizes of
+                Just count ->
+                    count
+
+                Nothing ->
+                    1
+
+        usedCount =
+            case Dict.get speedValue usedCounts of
+                Just count ->
+                    count
+
+                Nothing ->
+                    0
+
+        offset = calculateHorizontalOffset usedCount totalCount
+        updatedSpeedData = { speedData | horizontalOffset = offset }
+        updatedUsedCounts = Dict.insert speedValue (usedCount + 1) usedCounts
+    in
+    ( updatedUsedCounts, updatedSpeedData :: assignedList )
+
+
+calculateGroupSizes : List SimpleSpeedData -> Dict Int Int
+calculateGroupSizes speedDataList =
+    let
+        updateGroupSizes speedData currentDict =
+            let
+                speedValue = speedData.speed
+                existingCount =
+                    case Dict.get speedValue currentDict of
+                        Just value ->
+                            value
+
+                        Nothing ->
+                            0
+            in
+            Dict.insert speedValue (existingCount + 1) currentDict
+    in
+    List.foldl updateGroupSizes Dict.empty speedDataList
+
+
+calculateHorizontalOffset : Int -> Int -> Int
+calculateHorizontalOffset index groupSize =
+    let
+        spacing = 48
+        centerOffset = ((groupSize - 1) * spacing) // 2
+        rawOffset = index * spacing
+    in
+    rawOffset - centerOffset
+
+
+findMinSpeedSimple : List SimpleSpeedData -> Int
+findMinSpeedSimple speedDataList =
+    let
+        speeds = List.map .speed speedDataList
+    in
+    case List.minimum speeds of
+        Just value ->
+            value
+
+        Nothing ->
+            0
+
+
+findMaxSpeedSimple : List SimpleSpeedData -> Int
+findMaxSpeedSimple speedDataList =
+    let
+        speeds = List.map .speed speedDataList
+    in
+    case List.maximum speeds of
+        Just value ->
+            value
+
+        Nothing ->
+            200
+
+
+determineOverallMinimum : List ColumnDefinition -> Int
+determineOverallMinimum columnDefinitions =
+    let
+        collectMinimum columnDefinition =
+            findMinSpeedSimple columnDefinition.speedData
+
+        minimumValues = List.map collectMinimum columnDefinitions
+    in
+    case List.minimum minimumValues of
+        Just value ->
+            value
+
+        Nothing ->
+            0
+
+
+determineOverallMaximum : List ColumnDefinition -> Int
+determineOverallMaximum columnDefinitions =
+    let
+        collectMaximum columnDefinition =
+            findMaxSpeedSimple columnDefinition.speedData
+
+        maximumValues = List.map collectMaximum columnDefinitions
+    in
+    case List.maximum maximumValues of
+        Just value ->
+            value
+
+        Nothing ->
+            200
+
+
+generateAxisTicks : Int -> Int -> List Int
+generateAxisTicks minSpeed maxSpeed =
+    if maxSpeed <= minSpeed then
+        [ minSpeed ]
+    else
+        let
+            stepCount =
+                3
+
+            difference = maxSpeed - minSpeed
+            rawStep = difference // stepCount
+            baseStep =
+                if rawStep <= 0 then
+                    1
+                else
+                    rawStep
+
+            step = baseStep * 3
+            buildTick index =
+                minSpeed + index * step
+
+            indices = List.range 0 stepCount
+            preliminaryTicks = List.map buildTick indices
+            ticksWithMax =
+                if List.member maxSpeed preliminaryTicks then
+                    preliminaryTicks
+                else
+                    preliminaryTicks ++ [ maxSpeed ]
+        in
+        removeDuplicateTicks (List.sort ticksWithMax)
+
+
+removeDuplicateTicks : List Int -> List Int
+removeDuplicateTicks sortedTicks =
+    case sortedTicks of
+        [] ->
+            []
+
+        first :: rest ->
+            first :: removeDuplicateTicks (dropWhileEqual first rest)
+
+
+dropWhileEqual : Int -> List Int -> List Int
+dropWhileEqual target remaining =
+    case remaining of
+        [] ->
+            []
+
+        first :: rest ->
+            if first == target then
+                dropWhileEqual target rest
+            else
+                first :: rest
 
 
 truncatePokemonName : Bool -> String -> String
@@ -424,46 +597,3 @@ truncatePokemonName isCompactMode name =
         String.left 2 name
     else
         name
-
-
-calculatePositionSimple : Int -> Int -> Int -> Float
-calculatePositionSimple speedValue minSpeed maxSpeed =
-    let
-        range = toFloat (maxSpeed - minSpeed)
-        offset = toFloat (speedValue - minSpeed)
-    in
-    if range == 0 then
-        50.0
-    else
-        (offset / range) * 100.0
-
-
-calculateSpeedForConfiguration : Pokemon -> SpeedConfiguration -> Int
-calculateSpeedForConfiguration pokemon config =
-    let
-        baseSpeed = pokemon.stats.speed
-        level = 50
-        iv = 31
-    in
-    case config of
-        BaseEV0 ->
-            calculateBaseStat baseSpeed iv 0 level 1.0 1.0
-
-        MaxEV252 ->
-            calculateBaseStat baseSpeed iv 252 level 1.0 1.0
-
-        MaxEVWithNature ->
-            calculateBaseStat baseSpeed iv 252 level 1.1 1.0
-
-        MaxEVWithNatureAndItem ->
-            calculateBaseStat baseSpeed iv 252 level 1.1 1.5
-
-
-calculateBaseStat : Int -> Int -> Int -> Int -> Float -> Float -> Int
-calculateBaseStat base iv ev level natureMultiplier itemMultiplier =
-    let
-        baseCalculation = ((base * 2 + iv + (ev // 4)) * level) // 100 + 5
-        withNature = toFloat baseCalculation * natureMultiplier
-        withItem = withNature * itemMultiplier
-    in
-    round withItem
