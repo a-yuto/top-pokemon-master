@@ -500,66 +500,90 @@ body {
     height: 100%;
 }
 
-.pokemon-point {
+.speed-card {
     position: absolute;
     left: 50%;
     transform: translate(-50%, -50%);
-    min-width: 160px;
-    max-width: 220px;
-    padding: 8px 14px;
-    border-radius: 10px;
+    min-width: 220px;
+    max-width: 320px;
+    padding: 12px 16px;
+    border-radius: 12px;
     background: #ffffff;
-    border: 2px solid rgba(13, 110, 253, 0.35);
-    box-shadow: 0 6px 14px rgba(15, 23, 42, 0.12);
+    border: 2px solid rgba(13, 110, 253, 0.4);
+    box-shadow: 0 8px 20px rgba(15, 23, 42, 0.16);
     display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: flex-start;
-    gap: 14px;
-    font-size: 0.8rem;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+    font-size: 0.85rem;
     color: #2f3e55;
     z-index: 2;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-    white-space: nowrap;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
 }
 
-.pokemon-point:hover {
+.speed-card:hover {
     transform: translate(-50%, -50%) scale(1.05);
-    box-shadow: 0 10px 24px rgba(15, 23, 42, 0.18);
+    box-shadow: 0 14px 28px rgba(15, 23, 42, 0.2);
     border-color: rgba(220, 53, 69, 0.45);
     z-index: 200;
 }
 
-.pokemon-point.compact {
-    min-width: 110px;
-    max-width: 150px;
-    padding: 6px 8px;
-    font-size: 0.72rem;
+.speed-card-speed {
+    align-self: center;
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: #0d6efd;
+    background: rgba(13, 110, 253, 0.12);
+    padding: 2px 12px;
+    border-radius: 999px;
+}
+
+.speed-card-entry-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.speed-card-entry {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    font-size: 0.85rem;
+}
+
+.speed-card-entry-name {
+    font-weight: 600;
+}
+
+.speed-card-entry-base {
+    font-size: 0.75rem;
+    color: #6c757d;
+}
+
+.speed-card.compact {
+    min-width: 180px;
+    max-width: 240px;
+    padding: 10px 12px;
+    font-size: 0.78rem;
     gap: 8px;
 }
 
-.pokemon-name {
-    font-weight: 700;
-    font-size: 0.88rem;
-    text-align: left;
+.speed-card.compact .speed-card-speed {
+    font-size: 1rem;
+    padding: 2px 10px;
 }
 
-.pokemon-point.compact .pokemon-name {
-    font-size: 0.74rem;
+.speed-card.compact .speed-card-entry {
+    gap: 10px;
+    font-size: 0.78rem;
 }
 
-.pokemon-speed {
-    font-weight: 700;
-    font-size: 0.9rem;
-    color: #0d6efd;
-    background: rgba(13, 110, 253, 0.08);
-    padding: 2px 8px;
-    border-radius: 6px;
-}
-
-.pokemon-base-speed {
+.speed-card.compact .speed-card-entry-base {
     font-size: 0.7rem;
-    color: #6c757d;
 }
 
 @media (max-width: 992px) {
@@ -592,6 +616,16 @@ body {
 
     .speed-column {
         flex-basis: 240px;
+    }
+
+    .speed-card {
+        min-width: 200px;
+        max-width: 240px;
+        padding: 10px 12px;
+    }
+
+    .speed-card-entry-list {
+        gap: 4px;
     }
 }
 

@@ -1,4 +1,4 @@
-module Route.SpeedQuiz exposing (ActionData, Data, Model, Msg, route)
+module Route.SpeedQuiz exposing (ActionData, Data, Model, Msg, route, shouldRevealRealStats)
 
 import Array
 import BackendTask exposing (BackendTask)
@@ -14,7 +14,7 @@ import PagesMsg exposing (PagesMsg)
 import Pokemon.Data exposing (allPokemon, findPokemonById)
 import Pokemon.Types exposing (Pokemon, PokemonType(..))
 import Pokemon.UsageData as UsageData
-import Pokemon.BattleTypes exposing (BattleKata, calculateRealStats, Nature(..))
+import Pokemon.BattleTypes exposing (BattleKata, calculateRealStats, Nature(..), getNatureBonus, StatType(..))
 import WeightedRandom
 import Process
 import Random
@@ -369,13 +369,76 @@ viewPokemonButton pokemon model =
             ])
 
 
--- 実数値モードでは計算済みの素早さ値も表示
+shouldRevealRealStats : Bool -> Bool
+shouldRevealRealStats isWaitingForNext =
+    isWaitingForNext
+
+
+-- 実数値モードの素早さは解答後にのみ表示
 viewBattleKataButton : BattleKata -> Model -> Html (PagesMsg Msg)
 viewBattleKataButton kata model =
     let
         pokemon = getPokemonFromKata kata
         -- 実例: Lv50, 種族値45, 努力値0, 個体値31, 性格補正なし → 65
         realStats = calculateRealStats kata pokemon
+        speedEffortValue = kata.effortValues.speed
+        natureBonus = getNatureBonus kata.nature Speed
+        isNeutralNature = natureBonus == 1
+        bonusText =
+            if isNeutralNature then
+                "1.0"
+            else
+                String.fromFloat natureBonus
+        natureLabel =
+            case kata.nature of
+                Hardy -> "がんばりや"
+                Lonely -> "さみしがり"
+                Brave -> "ゆうかん"
+                Adamant -> "いじっぱり"
+                Naughty -> "やんちゃ"
+                Bold -> "ずぶとい"
+                Docile -> "すなお"
+                Relaxed -> "のんき"
+                Impish -> "わんぱく"
+                Lax -> "のうてんき"
+                Timid -> "おくびょう"
+                Hasty -> "せっかち"
+                Serious -> "まじめ"
+                Jolly -> "ようき"
+                Naive -> "むじゃき"
+                Modest -> "ひかえめ"
+                Mild -> "おっとり"
+                Quiet -> "れいせい"
+                Bashful -> "てれや"
+                Rash -> "うっかりや"
+                Calm -> "おだやか"
+                Gentle -> "おとなしい"
+                Sassy -> "なまいき"
+                Careful -> "しんちょう"
+                Quirky -> "きまぐれ"
+        heldItemDescription =
+            case kata.heldItemId of
+                Just _ ->
+                    "持ち物補正: あり"
+
+                Nothing ->
+                    "持ち物補正: なし"
+        effortDescription = "努力値(素早さ): " ++ String.fromInt speedEffortValue
+        natureDescription = "性格補正: " ++ bonusText ++ "倍 (" ++ natureLabel ++ ")"
+        detailElements =
+            [ Html.div [ Attr.class "pokemon-name" ] [ Html.text pokemon.name ]
+            , Html.div [ Attr.class "kata-detail" ] [ Html.text effortDescription ]
+            , Html.div [ Attr.class "kata-detail" ] [ Html.text natureDescription ]
+            , Html.div [ Attr.class "kata-detail" ] [ Html.text heldItemDescription ]
+            ]
+        elementsWithResult =
+            if shouldRevealRealStats model.isWaitingForNext then
+                detailElements
+                    ++ [ Html.div [ Attr.class "speed-value" ]
+                            [ Html.text ("素早さ: " ++ String.fromInt realStats.speed) ]
+                       ]
+            else
+                detailElements
     in
     Html.map PagesMsg.fromMsg 
         (Html.button
@@ -383,12 +446,8 @@ viewBattleKataButton kata model =
             , Attr.class "pokemon-button"
             , Attr.disabled model.isWaitingForNext
             ]
-            [ Html.div []
-                [ Html.text pokemon.name
-                , Html.div [ Attr.class "speed-value" ]
-                    [ Html.text ("素早さ: " ++ String.fromInt realStats.speed) ]
-                ]
-            ])
+            [ Html.div [] elementsWithResult ]
+        )
 
 
 viewResult : Maybe Question -> Model -> Html (PagesMsg Msg)

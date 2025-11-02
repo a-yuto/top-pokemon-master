@@ -4,14 +4,15 @@ module Route.SpeedTable exposing
     , Model
     , Msg
     , SimpleSpeedData
+    , GroupedSpeedCard
+    , GroupedPokemonEntry
     , SpeedConfiguration(..)
-    , assignHorizontalOffsetsSimple
     , calculateBaseStat
-    , calculateHorizontalOffset
     , calculateSpeedForConfiguration
     , calculateVerticalPosition
     , findMaxSpeedSimple
     , findMinSpeedSimple
+    , groupSpeedDataBySpeed
     , route
     , truncatePokemonName
     )
@@ -61,13 +62,24 @@ type alias SimpleSpeedData =
     { pokemon : Pokemon
     , speed : Int
     , baseSpeed : Int
-    , horizontalOffset : Int
     }
 
 
 type alias ColumnDefinition =
     { label : String
     , speedData : List SimpleSpeedData
+    }
+
+
+type alias GroupedPokemonEntry =
+    { pokemon : Pokemon
+    , baseSpeed : Int
+    }
+
+
+type alias GroupedSpeedCard =
+    { speed : Int
+    , entries : List GroupedPokemonEntry
     }
 
 
@@ -259,11 +271,14 @@ viewAxisTick minSpeed maxSpeed tickValue =
 viewSpeedColumn : Bool -> ColumnDefinition -> Int -> Int -> List Int -> Html (PagesMsg Msg)
 viewSpeedColumn isCompactMode columnDefinition minSpeed maxSpeed axisTicks =
     let
-        sortedAscending = List.sortBy .speed columnDefinition.speedData
-        sortedDescending = List.reverse sortedAscending
-        withOffsets = assignHorizontalOffsetsSimple sortedDescending
+        sortedDescending =
+            columnDefinition.speedData
+                |> List.sortBy .speed
+                |> List.reverse
+
+        groupedCards = groupSpeedDataBySpeed sortedDescending
         guidelineViews = List.map (viewColumnGuideline minSpeed maxSpeed) axisTicks
-        pokemonViews = List.map (viewPokemonPointSimple isCompactMode minSpeed maxSpeed) withOffsets
+        pokemonViews = List.map (viewGroupedSpeedCard isCompactMode minSpeed maxSpeed) groupedCards
     in
     div [ class "speed-column" ]
         [ div [ class "speed-column-header" ] [ text columnDefinition.label ]
@@ -287,44 +302,58 @@ viewColumnGuideline minSpeed maxSpeed tickValue =
         []
 
 
-viewPokemonPointSimple : Bool -> Int -> Int -> SimpleSpeedData -> Html (PagesMsg Msg)
-viewPokemonPointSimple isCompactMode minSpeed maxSpeed speedData =
+viewGroupedSpeedCard : Bool -> Int -> Int -> GroupedSpeedCard -> Html (PagesMsg Msg)
+viewGroupedSpeedCard isCompactMode minSpeed maxSpeed groupedCard =
     let
-        verticalPosition = calculateVerticalPosition speedData.speed minSpeed maxSpeed
-        horizontalOffset = speedData.horizontalOffset
-        displayName = truncatePokemonName isCompactMode speedData.pokemon.name
-        horizontalPositionText =
-            if horizontalOffset >= 0 then
-                "calc(50% + " ++ String.fromInt horizontalOffset ++ "px)"
-            else
-                "calc(50% - " ++ String.fromInt (abs horizontalOffset) ++ "px)"
-
-        tooltip =
-            speedData.pokemon.name
-                ++ " / "
-                ++ speedData.pokemon.englishName
-                ++ " : "
-                ++ String.fromInt speedData.speed
-                ++ " (基礎 "
-                ++ String.fromInt speedData.baseSpeed
-                ++ ")"
-
-        compactClass =
+        verticalPosition = calculateVerticalPosition groupedCard.speed minSpeed maxSpeed
+        positionText = String.fromFloat verticalPosition ++ "%"
+        tooltip = buildGroupedTooltip groupedCard.entries groupedCard.speed
+        entryViews = List.map (viewGroupedEntry isCompactMode) groupedCard.entries
+        cardClass =
             if isCompactMode then
-                "pokemon-point compact"
+                "speed-card compact"
             else
-                "pokemon-point"
+                "speed-card"
     in
     div
-        [ class compactClass
-        , style "top" (String.fromFloat verticalPosition ++ "%")
-        , style "left" horizontalPositionText
+        [ class cardClass
+        , style "top" positionText
+        , style "left" "50%"
+        , style "transform" "translate(-50%, -50%)"
         , title tooltip
         ]
-        [ div [ class "pokemon-name" ] [ text displayName ]
-        , div [ class "pokemon-speed" ] [ text (String.fromInt speedData.speed) ]
-        , div [ class "pokemon-base-speed" ] [ text ("基礎 " ++ String.fromInt speedData.baseSpeed) ]
+        [ div [ class "speed-card-speed" ] [ text (String.fromInt groupedCard.speed) ]
+        , ul [ class "speed-card-entry-list" ] entryViews
         ]
+
+
+viewGroupedEntry : Bool -> GroupedPokemonEntry -> Html msg
+viewGroupedEntry isCompactMode entry =
+    let
+        displayName = truncatePokemonName isCompactMode entry.pokemon.name
+        baseStatText = "基礎 " ++ String.fromInt entry.baseSpeed
+    in
+    li [ class "speed-card-entry" ]
+        [ span [ class "speed-card-entry-name" ] [ text displayName ]
+        , span [ class "speed-card-entry-base" ] [ text baseStatText ]
+        ]
+
+
+buildGroupedTooltip : List GroupedPokemonEntry -> Int -> String
+buildGroupedTooltip entries speedValue =
+    let
+        buildLine entry =
+            entry.pokemon.name
+                ++ " / "
+                ++ entry.pokemon.englishName
+                ++ " (基礎 "
+                ++ String.fromInt entry.baseSpeed
+                ++ ")"
+
+        lines = List.map buildLine entries
+        joined = String.join ", " lines
+    in
+    "実数値 " ++ String.fromInt speedValue ++ " : " ++ joined
 
 
 createBaseEV0SpeedData : Pokemon -> SimpleSpeedData
@@ -352,7 +381,6 @@ createSpeedDataWithConfiguration pokemon configuration =
     { pokemon = pokemon
     , speed = calculateSpeedForConfiguration pokemon configuration
     , baseSpeed = pokemon.stats.speed
-    , horizontalOffset = 0
     }
 
 
@@ -400,82 +428,42 @@ calculateVerticalPosition speedValue minSpeed maxSpeed =
         100.0 - ((offset / range) * 100.0)
 
 
-assignHorizontalOffsetsSimple : List SimpleSpeedData -> List SimpleSpeedData
-assignHorizontalOffsetsSimple speedDataList =
+groupSpeedDataBySpeed : List SimpleSpeedData -> List GroupedSpeedCard
+groupSpeedDataBySpeed speedDataList =
     let
-        groupSizes = calculateGroupSizes speedDataList
-        assignStep speedData state =
-            assignOffsetToSpeedData speedData groupSizes state
-
-        initialState =
-            ( Dict.empty, [] )
-
-        finalState =
-            List.foldl assignStep initialState speedDataList
-    in
-    case finalState of
-        ( _, reversedList ) ->
-            List.reverse reversedList
-
-
-assignOffsetToSpeedData :
-    SimpleSpeedData
-    -> Dict Int Int
-    -> ( Dict Int Int, List SimpleSpeedData )
-    -> ( Dict Int Int, List SimpleSpeedData )
-assignOffsetToSpeedData speedData groupSizes ( usedCounts, assignedList ) =
-    let
-        speedValue = speedData.speed
-        totalCount =
-            case Dict.get speedValue groupSizes of
-                Just count ->
-                    count
-
-                Nothing ->
-                    1
-
-        usedCount =
-            case Dict.get speedValue usedCounts of
-                Just count ->
-                    count
-
-                Nothing ->
-                    0
-
-        offset = calculateHorizontalOffset usedCount totalCount
-        updatedSpeedData = { speedData | horizontalOffset = offset }
-        updatedUsedCounts = Dict.insert speedValue (usedCount + 1) usedCounts
-    in
-    ( updatedUsedCounts, updatedSpeedData :: assignedList )
-
-
-calculateGroupSizes : List SimpleSpeedData -> Dict Int Int
-calculateGroupSizes speedDataList =
-    let
-        updateGroupSizes speedData currentDict =
+        accumulate speedData accumulatedGroups =
             let
-                speedValue = speedData.speed
-                existingCount =
-                    case Dict.get speedValue currentDict of
-                        Just value ->
-                            value
+                entry =
+                    { pokemon = speedData.pokemon
+                    , baseSpeed = speedData.baseSpeed
+                    }
 
-                        Nothing ->
-                            0
+                existing =
+                    Dict.get speedData.speed accumulatedGroups
+                        |> Maybe.withDefault []
+
+                updated = entry :: existing
             in
-            Dict.insert speedValue (existingCount + 1) currentDict
-    in
-    List.foldl updateGroupSizes Dict.empty speedDataList
+            Dict.insert speedData.speed updated accumulatedGroups
 
+        groupedDict =
+            List.foldl accumulate Dict.empty speedDataList
 
-calculateHorizontalOffset : Int -> Int -> Int
-calculateHorizontalOffset index groupSize =
-    let
-        spacing = 48
-        centerOffset = ((groupSize - 1) * spacing) // 2
-        rawOffset = index * spacing
+        toGroupedCard ( speedValue, entries ) =
+            let
+                sortedEntries =
+                    entries
+                        |> List.sortBy (\entry -> ( entry.pokemon.name, entry.baseSpeed ))
+            in
+            { speed = speedValue
+            , entries = sortedEntries
+            }
     in
-    rawOffset - centerOffset
+    groupedDict
+        |> Dict.toList
+        |> List.sortBy Tuple.first
+        |> List.reverse
+        |> List.map toGroupedCard
 
 
 findMinSpeedSimple : List SimpleSpeedData -> Int

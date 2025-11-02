@@ -2,7 +2,7 @@ module SpeedTableTest exposing (..)
 
 import Expect
 import Pokemon.Types exposing (Pokemon, PokemonType(..), Stats)
-import Route.SpeedTable exposing (SimpleSpeedData, SpeedConfiguration(..), assignHorizontalOffsetsSimple, calculateBaseStat, calculateHorizontalOffset, calculateSpeedForConfiguration, calculateVerticalPosition, findMaxSpeedSimple, findMinSpeedSimple, truncatePokemonName)
+import Route.SpeedTable exposing (SimpleSpeedData, SpeedConfiguration(..), calculateBaseStat, calculateSpeedForConfiguration, calculateVerticalPosition, findMaxSpeedSimple, findMinSpeedSimple, groupSpeedDataBySpeed, truncatePokemonName)
 import Test exposing (..)
 
 
@@ -172,59 +172,47 @@ suite =
                     Expect.equal True (minCorrect && maxCorrect)
             ]
 
-        , describe "assignHorizontalOffsetsSimple"
-            [ test "assigns symmetric offsets to overlapping Pokemon" <|
+        , describe "groupSpeedDataBySpeed"
+            [ test "groups multiple Pokemon with identical speed into one card" <|
                 \_ ->
                     let
-                        duplicateSpeedData = createDuplicateSpeedData
-                        withOffsets = assignHorizontalOffsetsSimple duplicateSpeedData
-                        offsetList = List.map getHorizontalOffset withOffsets
+                        speedList = createDuplicateSpeedData
+                        grouped = groupSpeedDataBySpeed speedList
+                        cardCount = List.length grouped
+                        firstCard = List.head grouped
+                        entryCount =
+                            case firstCard of
+                                Just card ->
+                                    List.length card.entries
+
+                                Nothing ->
+                                    0
                     in
-                    Expect.equal [ -24, 24 ] offsetList
+                    Expect.equal ( 1, 2 ) ( cardCount, entryCount )
 
-            , test "handles single Pokemon without duplicates" <|
-                \_ ->
-                    let
-                        singleData = [ createSimpleSpeedData createTestGarchomp 200 ]
-                        withOffsets = assignHorizontalOffsetsSimple singleData
-                        maybeFirst = getFirstSimpleSpeedData withOffsets
-                    in
-                    case maybeFirst of
-                        Just first ->
-                            Expect.equal 0 first.horizontalOffset
-
-                        Nothing ->
-                            Expect.fail "Expected data for single Pokemon"
-
-            , test "assigns consistent offsets for the same Pokemon across datasets" <|
-                \_ ->
-                    let
-                        firstDataset = createConsistentOffsetDatasetA
-                        secondDataset = createConsistentOffsetDatasetB
-                        firstOffsets = assignHorizontalOffsetsSimple firstDataset
-                        secondOffsets = assignHorizontalOffsetsSimple secondDataset
-                        offsetA = getOffsetForPokemon "ガブリアス" firstOffsets
-                        offsetB = getOffsetForPokemon "ガブリアス" secondOffsets
-                    in
-                    Expect.equal offsetA offsetB
-
-            , test "sorts Pokemon by speed descending before assigning offsets" <|
+            , test "orders grouped cards by speed descending" <|
                 \_ ->
                     let
                         dataset = createSortingVerificationDataset
-                        withOffsets = assignHorizontalOffsetsSimple dataset
-                        names = List.map getPokemonNameFromSimpleSpeedData withOffsets
+                        grouped = groupSpeedDataBySpeed dataset
+                        speeds = List.map (.speed) grouped
                     in
-                    Expect.equal [ "テッカニン", "ガブリアス", "カイリュー" ] names
+                    Expect.equal [ 205, 185, 160 ] speeds
 
-            , test "spreads three identical speeds evenly" <|
+            , test "sorts entries inside a card alphabetically by name" <|
                 \_ ->
                     let
-                        tripleData = createTripleDuplicateSpeedData
-                        withOffsets = assignHorizontalOffsetsSimple tripleData
-                        offsetList = List.map getHorizontalOffset withOffsets
+                        dataset = createTripleDuplicateSpeedData
+                        grouped = groupSpeedDataBySpeed dataset
+                        names =
+                            case grouped of
+                                card :: _ ->
+                                    List.map (\entry -> entry.pokemon.name) card.entries
+
+                                [] ->
+                                    []
                     in
-                    Expect.equal [ -48, 0, 48 ] offsetList
+                    Expect.equal [ "カイリュー", "ガブリアス", "テッカニン" ] names
             ]
 
         , describe "calculateBaseStat"
@@ -253,30 +241,6 @@ suite =
                     Expect.equal expectedMinimum result
             ]
 
-        , describe "calculateHorizontalOffset"
-            [ test "returns zero offset for a single entry" <|
-                \_ ->
-                    Expect.equal 0 (calculateHorizontalOffset 0 1)
-
-            , test "places two entries symmetrically" <|
-                \_ ->
-                    let
-                        firstOffset = calculateHorizontalOffset 0 2
-                        secondOffset = calculateHorizontalOffset 1 2
-                    in
-                    Expect.equal True (firstOffset == -24 && secondOffset == 24)
-
-            , test "places three entries symmetrically" <|
-                \_ ->
-                    let
-                        firstOffset = calculateHorizontalOffset 0 3
-                        secondOffset = calculateHorizontalOffset 1 3
-                        thirdOffset = calculateHorizontalOffset 2 3
-                        condition =
-                            firstOffset == -48 && secondOffset == 0 && thirdOffset == 48
-                    in
-                    Expect.equal True condition
-            ]
         ]
 
 
@@ -389,7 +353,6 @@ createSimpleSpeedData pokemon speedValue =
     { pokemon = pokemon
     , speed = speedValue
     , baseSpeed = pokemon.stats.speed
-    , horizontalOffset = 0
     }
 
 
@@ -418,22 +381,6 @@ createTripleDuplicateSpeedData =
     ]
 
 
-createConsistentOffsetDatasetA : List SimpleSpeedData
-createConsistentOffsetDatasetA =
-    [ createSimpleSpeedData createTestGarchomp 120
-    , createSimpleSpeedData createTestShuckle 40
-    , createSimpleSpeedData createTestDragonite 90
-    ]
-
-
-createConsistentOffsetDatasetB : List SimpleSpeedData
-createConsistentOffsetDatasetB =
-    [ createSimpleSpeedData createTestGarchomp 130
-    , createSimpleSpeedData createTestShuckle 35
-    , createSimpleSpeedData createTestDragonite 100
-    ]
-
-
 createSortingVerificationDataset : List SimpleSpeedData
 createSortingVerificationDataset =
     [ createSimpleSpeedData createTestDragonite 160
@@ -452,38 +399,3 @@ createTestDragonite =
     , preEvolutionId = Nothing
     , evolutionMethods = []
     }
-
-
-getOffsetForPokemon : String -> List SimpleSpeedData -> Int
-getOffsetForPokemon targetName speedDataList =
-    case List.filter (hasTargetName targetName) speedDataList of
-        first :: _ ->
-            first.horizontalOffset
-
-        [] ->
-            -1
-
-
-getHorizontalOffset : SimpleSpeedData -> Int
-getHorizontalOffset speedData =
-    speedData.horizontalOffset
-
-
-getFirstSimpleSpeedData : List SimpleSpeedData -> Maybe SimpleSpeedData
-getFirstSimpleSpeedData speedDataList =
-    case speedDataList of
-        first :: _ ->
-            Just first
-
-        [] ->
-            Nothing
-
-
-getPokemonNameFromSimpleSpeedData : SimpleSpeedData -> String
-getPokemonNameFromSimpleSpeedData speedData =
-    speedData.pokemon.name
-
-
-hasTargetName : String -> SimpleSpeedData -> Bool
-hasTargetName targetName speedData =
-    speedData.pokemon.name == targetName
