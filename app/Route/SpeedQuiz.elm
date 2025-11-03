@@ -11,7 +11,7 @@ import Html.Attributes as Attr
 import Html.Events
 import Pages.Url
 import PagesMsg exposing (PagesMsg)
-import Pokemon.Data exposing (allPokemon, findPokemonById)
+import Pokemon.Data exposing (findPokemonById)
 import Pokemon.Types exposing (Pokemon, PokemonType(..))
 import Pokemon.UsageData as UsageData
 import Pokemon.BattleTypes exposing (BattleKata, calculateRealStats, Nature(..), getNatureBonus, StatType(..))

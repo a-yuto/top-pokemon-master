@@ -270,20 +270,214 @@ getPokemonVariations : String -> List BattleKataConfig
 getPokemonVariations pokemonName =
     case pokemonName of
         "ディンルー" ->
-            [ { name = "HD特殊受け", nature = Careful, effortValues = hpSpecialDefenseEVs, heldItemId = Nothing }
-            , { name = "HB物理受け", nature = Impish, effortValues = hpDefenseEVs, heldItemId = Nothing }
+            [ { name = "HB252しんちょう", nature = Careful, effortValues = hpSpecialDefenseEVs, heldItemId = Nothing }
+            , { name = "HB252わんぱく", nature = Impish, effortValues = hpDefenseEVs, heldItemId = Nothing }
             ]
-        
+
         "パオジアン" ->
-            [ { name = "AS物理", nature = Jolly, effortValues = attackSpeedEVs, heldItemId = Nothing }
-            , { name = "ASスカーフ", nature = Jolly, effortValues = attackSpeedEVs, heldItemId = Nothing }
+            [ { name = "CS252いじっぱり", nature = Adamant, effortValues = attackSpeedEVs, heldItemId = Nothing }
+            , { name = "CS252ようき", nature = Jolly, effortValues = attackSpeedEVs, heldItemId = Nothing }
             ]
-        
+
         "ガブリアス" ->
-            [ { name = "AS物理", nature = Jolly, effortValues = attackSpeedEVs, heldItemId = Nothing }
-            , { name = "HB物理受け", nature = Impish, effortValues = hpDefenseEVs, heldItemId = Nothing }
+            [ { name = "AS252ようき", nature = Jolly, effortValues = attackSpeedEVs, heldItemId = Nothing }
+            , { name = "HB252わんぱく", nature = Impish, effortValues = hpDefenseEVs, heldItemId = Nothing }
             ]
-        
+
+        "バドレックス" ->
+            [ { name = "CS252おくびょう", nature = Timid, effortValues = specialAttackSpeedEVs, heldItemId = Nothing }
+            , { name = "CSおくびょうスカーフ", nature = Timid, effortValues = specialAttackSpeedEVs, heldItemId = Nothing }
+            ]
+
+        "バドレックス(黒馬)" ->
+            [ { name = "CS252おくびょう", nature = Timid, effortValues = specialAttackSpeedEVs, heldItemId = Nothing }
+            , { name = "CSおくびょうスカーフ", nature = Timid, effortValues = specialAttackSpeedEVs, heldItemId = Nothing }
+            ]
+
+        "ヘイラッシャ" ->
+            [ { name = "HD252しんちょう", nature = Careful, effortValues = hpSpecialDefenseEVs, heldItemId = Nothing } ]
+
+        "ハバタクカミ" ->
+            [ { name = "CS252おくびょう", nature = Timid, effortValues = specialAttackSpeedEVs, heldItemId = Nothing } ]
+
+        "コライドン" ->
+            [ { name = "AS252ようきスカーフ", nature = Jolly, effortValues = attackSpeedEVs, heldItemId = Nothing }
+            , { name = "AS252いじっぱり", nature = Adamant, effortValues = attackSpeedEVs, heldItemId = Nothing }
+            ]
+
+        "アルセウス" ->
+            [ { name = "AS252ようき", nature = Jolly, effortValues = attackSpeedEVs, heldItemId = Nothing }
+            , { name = "CS252ひかえめ", nature = Modest, effortValues = specialAttackSpeedEVs, heldItemId = Nothing }
+            , { name = "CS252おくびょう", nature = Timid, effortValues = specialAttackSpeedEVs, heldItemId = Nothing }
+            ]
+
+        "ミライドン" ->
+            [ { name = "AS252おくびょうスカーフ", nature = Timid, effortValues = specialAttackSpeedEVs, heldItemId = Nothing }
+            , { name = "CS252ひかえめ", nature = Modest, effortValues = specialAttackSpeedEVs, heldItemId = Nothing }
+            ]
+
+        "ウーラオス" ->
+            [ { name = "AS252いじっぱり", nature = Adamant, effortValues = attackSpeedEVs, heldItemId = Nothing }
+            , { name = "AS252ようき", nature = Jolly, effortValues = attackSpeedEVs, heldItemId = Nothing }
+            ]
+
+        "ランドロス" ->
+            [ { name = "AS252いじっぱりスカーフ", nature = Adamant, effortValues = attackSpeedEVs, heldItemId = Nothing }
+            , { name = "HA252いじっぱり", nature = Adamant, effortValues = hpAttackEVs, heldItemId = Nothing }
+            ]
+
+        "ランドロス(霊獣)" ->
+            [ { name = "AS252いじっぱりスカーフ", nature = Adamant, effortValues = attackSpeedEVs, heldItemId = Nothing }
+            , { name = "HA252いじっぱり", nature = Adamant, effortValues = hpAttackEVs, heldItemId = Nothing }
+            ]
+
+        "キラフロル" ->
+            [ { name = "CS252おくびょう", nature = Timid, effortValues = specialAttackSpeedEVs, heldItemId = Nothing }
+            , { name = "HB252ずぶとい", nature = Bold, effortValues = hpDefenseEVs, heldItemId = Nothing }
+            ]
+
+        "ホウオウ" ->
+            [ { name = "HB252わんぱく", nature = Impish, effortValues = hpDefenseEVs, heldItemId = Nothing } ]
+
+        "グライオン" ->
+            [ { name = "HS252ようき", nature = Jolly, effortValues = hpSpeedEVs, heldItemId = Nothing }
+            , { name = "HB252わんぱく", nature = Impish, effortValues = hpDefenseEVs, heldItemId = Nothing }
+            ]
+
+        "ザシアン" ->
+            [ { name = "AS252ようき", nature = Jolly, effortValues = attackSpeedEVs, heldItemId = Nothing }
+            , { name = "AS252いじっぱり", nature = Adamant, effortValues = attackSpeedEVs, heldItemId = Nothing }
+            ]
+
+        "カイリュー" ->
+            [ { name = "HA252いじっぱり", nature = Adamant, effortValues = hpAttackEVs, heldItemId = Nothing } ]
+
+        "ミミッキュ" ->
+            [ { name = "HA252いじっぱり", nature = Adamant, effortValues = hpAttackEVs, heldItemId = Nothing }
+            , { name = "AS252ようき", nature = Jolly, effortValues = attackSpeedEVs, heldItemId = Nothing }
+            ]
+
+        "オーガポン" ->
+            [ { name = "HA252いじっぱり", nature = Adamant, effortValues = hpAttackEVs, heldItemId = Nothing }
+            , { name = "AS252ようき", nature = Jolly, effortValues = attackSpeedEVs, heldItemId = Nothing }
+            ]
+
+        "カイオーガ" ->
+            [ { name = "CS252ひかえめ", nature = Modest, effortValues = specialAttackSpeedEVs, heldItemId = Nothing }
+            , { name = "CS252おくびょう", nature = Timid, effortValues = specialAttackSpeedEVs, heldItemId = Nothing }
+            , { name = "CS252おくびょうスカーフ", nature = Timid, effortValues = specialAttackSpeedEVs, heldItemId = Nothing }
+            ]
+
+        "ドオー" ->
+            [ { name = "HB252わんぱく", nature = Impish, effortValues = hpDefenseEVs, heldItemId = Nothing } ]
+
+        "キョジオーン" ->
+            [ { name = "HB252わんぱく", nature = Impish, effortValues = hpDefenseEVs, heldItemId = Nothing } ]
+
+        "ブリジュラス" ->
+            [ { name = "HB252ずぶとい", nature = Bold, effortValues = hpDefenseEVs, heldItemId = Nothing } ]
+
+        "ガチグマ" ->
+            [ { name = "HC252ひかえめ", nature = Modest, effortValues = hpSpecialAttackEVs, heldItemId = Nothing }
+            , { name = "HA252いじっぱり", nature = Adamant, effortValues = hpAttackEVs, heldItemId = Nothing }
+            ]
+
+        "オオニューラ" ->
+            [ { name = "AS252いじっぱり", nature = Adamant, effortValues = attackSpeedEVs, heldItemId = Nothing }
+            , { name = "AS252ようき", nature = Jolly, effortValues = attackSpeedEVs, heldItemId = Nothing }
+            ]
+
+        "オーロンゲ" ->
+            [ { name = "HB252わんぱく", nature = Impish, effortValues = hpDefenseEVs, heldItemId = Nothing } ]
+
+        "テツノワダチ" ->
+            [ { name = "AS252ようき", nature = Jolly, effortValues = attackSpeedEVs, heldItemId = Nothing } ]
+
+        "メタモン" ->
+            [ { name = "変幻自在", nature = Serious, effortValues = emptyEVs, heldItemId = Nothing } ]
+
+        "ルナアーラ" ->
+            [ { name = "HC252ひかえめ", nature = Modest, effortValues = hpSpecialAttackEVs, heldItemId = Nothing }
+            , { name = "CS252ひかえめ", nature = Modest, effortValues = specialAttackSpeedEVs, heldItemId = Nothing }
+            , { name = "CS252おくびょう", nature = Timid, effortValues = specialAttackSpeedEVs, heldItemId = Nothing }
+            , { name = "CS252おくびょうスカーフ", nature = Timid, effortValues = specialAttackSpeedEVs, heldItemId = Nothing }
+            ]
+
+        "ママンボウ" ->
+            [ { name = "HB252のんき", nature = Relaxed, effortValues = hpDefenseEVs, heldItemId = Nothing } ]
+
+        "モモワロウ" ->
+            [ { name = "HB252わんぱく", nature = Impish, effortValues = hpDefenseEVs, heldItemId = Nothing }
+            , { name = "HS252おくびょう", nature = Timid, effortValues = hpSpeedEVs, heldItemId = Nothing }
+            ]
+
+        "ムゲンダイナ" ->
+            [ { name = "CS252おくびょう", nature = Timid, effortValues = specialAttackSpeedEVs, heldItemId = Nothing }
+            , { name = "CS252ひかえめ", nature = Modest, effortValues = specialAttackSpeedEVs, heldItemId = Nothing }
+            ]
+
+        "バドレックス(白馬)" ->
+            [ { name = "HA252ゆうかん", nature = Brave, effortValues = hpAttackEVs, heldItemId = Nothing } ]
+
+        "イーユイ" ->
+            [ { name = "CS252ひかえめ", nature = Modest, effortValues = specialAttackSpeedEVs, heldItemId = Nothing }
+            , { name = "CS252おくびょうスカーフ", nature = Timid, effortValues = specialAttackSpeedEVs, heldItemId = Nothing }
+            ]
+
+        "ハッサム" ->
+            [ { name = "HA252いじっぱり", nature = Adamant, effortValues = hpAttackEVs, heldItemId = Nothing } ]
+
+        "ラウドボーン" ->
+            [ { name = "HB252ずぶとい", nature = Bold, effortValues = hpDefenseEVs, heldItemId = Nothing } ]
+
+        "アシレーヌ" ->
+            [ { name = "HC252ひかえめ", nature = Modest, effortValues = hpSpecialAttackEVs, heldItemId = Nothing } ]
+
+        "デオキシス(アタック)" ->
+            [ { name = "AS252むじゃき", nature = Naive, effortValues = attackSpeedEVs, heldItemId = Nothing } ]
+
+        "ベトベトン(アローラ)" ->
+            [ { name = "HD252しんちょう", nature = Careful, effortValues = hpSpecialDefenseEVs, heldItemId = Nothing } ]
+
+        "チオンジェン" ->
+            [ { name = "HD252しんちょう", nature = Careful, effortValues = hpSpecialDefenseEVs, heldItemId = Nothing } ]
+
+        "アルセウス(地面)" ->
+            [ { name = "HA252いじっぱり", nature = Adamant, effortValues = hpAttackEVs, heldItemId = Nothing } ]
+
+        "ドーブル" ->
+            [ { name = "HS252ようき", nature = Jolly, effortValues = hpSpeedEVs, heldItemId = Nothing } ]
+
+        "ガオガエン" ->
+            [ { name = "HD252しんちょう", nature = Careful, effortValues = hpSpecialDefenseEVs, heldItemId = Nothing } ]
+
+        "ゴリランダー" ->
+            [ { name = "HA252いじっぱり", nature = Adamant, effortValues = hpAttackEVs, heldItemId = Nothing } ]
+
+        "ルギア" ->
+            [ { name = "HB252ずぶとい", nature = Bold, effortValues = hpDefenseEVs, heldItemId = Nothing }
+            , { name = "CS252おくびょう", nature = Timid, effortValues = specialAttackSpeedEVs, heldItemId = Nothing }
+            ]
+
+        "マタドガス(ガラル)" ->
+            [ { name = "HB252ずぶとい", nature = Bold, effortValues = hpDefenseEVs, heldItemId = Nothing } ]
+
+        "キノガッサ" ->
+            [ { name = "AS252いじっぱり", nature = Adamant, effortValues = attackSpeedEVs, heldItemId = Nothing }
+            , { name = "AS252ようき", nature = Jolly, effortValues = attackSpeedEVs, heldItemId = Nothing }
+            ]
+
+        "テツノブジン" ->
+            [ { name = "AS252いじっぱり", nature = Adamant, effortValues = attackSpeedEVs, heldItemId = Nothing }
+            , { name = "AS252ようき", nature = Jolly, effortValues = attackSpeedEVs, heldItemId = Nothing }
+            ]
+
+        "テラパゴス" ->
+            [ { name = "HC252ひかえめ", nature = Modest, effortValues = hpSpecialAttackEVs, heldItemId = Nothing } ]
+
+        "ネクロズマ" ->
+            [ { name = "HC252ひかえめ", nature = Modest, effortValues = hpSpecialAttackEVs, heldItemId = Nothing } ]
+
         _ ->
             [ getDefaultConfigForPokemon pokemonName ]
 
@@ -302,6 +496,26 @@ hpDefenseEVs =
 hpSpecialDefenseEVs : EffortValues
 hpSpecialDefenseEVs =
     { hp = 252, attack = 0, defense = 4, specialAttack = 0, specialDefense = 252, speed = 0 }
+
+
+hpAttackEVs : EffortValues
+hpAttackEVs =
+    { hp = 252, attack = 252, defense = 0, specialAttack = 0, specialDefense = 4, speed = 0 }
+
+
+hpSpecialAttackEVs : EffortValues
+hpSpecialAttackEVs =
+    { hp = 252, attack = 0, defense = 0, specialAttack = 252, specialDefense = 4, speed = 0 }
+
+
+hpSpeedEVs : EffortValues
+hpSpeedEVs =
+    { hp = 252, attack = 0, defense = 4, specialAttack = 0, specialDefense = 0, speed = 252 }
+
+
+specialAttackSpeedEVs : EffortValues
+specialAttackSpeedEVs =
+    { hp = 4, attack = 0, defense = 0, specialAttack = 252, specialDefense = 0, speed = 252 }
 
 
 getDefaultConfig : BattleKataConfig
