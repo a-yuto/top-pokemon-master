@@ -12,6 +12,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - **pipe operator (`|>`) の使用を避ける** - 代わりに通常の関数適用を使用
 - **匿名関数の使用を避ける** - 代わりに名前付きヘルパー関数を定義
 - **可読性を重視** - コードの意図を明確にする名前付き関数を優先
+- 作業中はtemp.mdのドキュメントに作業メモを残すこと。
 
 ### 悪い例
 ```elm
@@ -57,27 +58,54 @@ result =
 ## プロジェクト構造とアーキテクチャ
 
 ### ディレクトリ構造
-- `app/` - メインアプリケーションコード
-  - `Route/` - 各ページコンポーネント（ファイル名がURLパスに対応）
-  - `Shared.elm` - アプリケーション全体で共有される状態とロジック
-  - `Effect.elm` - カスタムエフェクト（サイドエフェクト）の定義
-  - `Api.elm` - APIルート定義（サーバーレス関数）
-  - `Site.elm` - サイトメタデータ設定
-  - `View.elm` - 共通ビューヘルパー
-  - `ErrorPage.elm` - エラーページの処理
-- `.elm-pages/` - 自動生成されるディレクトリ（編集不可）
-- `public/` - 静的アセット（画像、フォントなど）
-- `functions/` - Netlify Functions（サーバーレス関数）
-- `dist/` - ビルド出力ディレクトリ
-- `tests/` - ユニットテストファイル（13ファイル、136テスト）
-  - `tests/PokemonDataTest.elm` - ポケモンデータ関数のテスト
-  - `tests/MoveDataTest.elm` - 技データ関数のテスト
-  - `tests/WeightedRandomTest.elm` - 重み付きランダム選択のテスト
-  - `tests/SpeedQuizIntegrationTest.elm` - SpeedQuizの統合テスト
-  - `tests/BattleTypesTest.elm` - バトル用型のテスト
-  - `tests/AbilityDataTest.elm` - 特性データのテスト
-  - `tests/SpeedTableTest.elm` - 素早さ表のテスト
-  - その他のテストファイル
+- `app/` - フロントエンドのエントリーポイント。UIとページロジックを担当
+  - `Route/` - 各URLに対応するモジュールを配置。`Route.*`は`RouteBuilder`を使い、`init`/`update`/`view`を通じてElm PagesのStatefulRouteを構築
+    - `Route/<Name>.elm` - 静的パス
+    - `Route/<Dir>/Slug_.elm` - 動的パス（`Slug_`や`Id_`など末尾`_`はパラメータを意味）
+  - `Shared.elm` - サイト全体で共有するグローバル状態と`Shared.Msg`を定義。認証やテーマ切り替えなど横断的な状態をハンドリング
+  - `Effect.elm` - サーバーサイドで実行可能な`BackendTask`とクライアントサイドの`Cmd msg`を橋渡しするためのラッパーを定義
+  - `Api.elm` - Netlify Functionsに相当するAPIエンドポイントをElmで記述。`Route.Api.*`から利用
+  - `Site.elm` - サイト全体のメタデータ（タイトル、favicon、OGP画像）を集中管理
+  - `View.elm` - ボタン、カード、レイアウトなどの共有UIヘルパーを定義。Routeモジュールから再利用
+  - `ErrorPage.elm` - 404や500などのエラールートを一元管理
+- `.elm-pages/` - elm-pages CLIが生成するコード。ビルド時に再生成されるので手動編集禁止
+- `src/` - ドメインロジックとデータ管理を担当する純粋Elmコード
+  - `Pokemon/` - ポケモン関連の型定義、データ、ユーティリティをモジュールごとに分割
+  - `WeightedRandom.elm` - 使用率ベースの重み付き乱択アルゴリズムや`BattleKata`生成を実装
+  - `Backend/` - バックエンド連携用の補助モジュール（存在する場合）
+  - `Utils/` - 汎用的な小規模ヘルパー（使用する場合）
+- `public/` - ビルド成果物にそのまま含まれる静的アセット。画像・フォント・CSSなど
+  - `public/style.css` - グローバルスタイルのエントリーポイント。Elmからはclass属性で参照
+  - `public/data/` - 変換済みJSONを配置。フロントエンドやバックエンドタスクが参照
+- `functions/` - Netlify FunctionsのTypeScript/JavaScript実装（必要な場合）
+- `dist/` - `npm run build` の出力先。デプロイ用の最終成果物が格納される
+- `scripts/` - データ変換や補助的なビルドスクリプト
+- `tests/` - elm-testベースのユニットテストと統合テスト群
+  - ドメインごとにファイルを分割し、`Expect`と`Test.describe`で仕様を明示
+  - SpeedQuiz、WeightedRandom、Pokemonデータなど主要機能を網羅
+
+### アーキテクチャの層構造
+- **UI層 (`app/Route/*`)**
+  - elm-pages `RouteBuilder`によってStateful/Stateless Routeを構成
+  - `Model`はページ固有の状態を持ち、`Msg`でユーザー操作を受け取る
+  - `view`は`Html msg`でUIを構築し、`PagesMsg.fromMsg`を介して親コンテキストと通信
+- **共有状態層 (`app/Shared.elm`)**
+  - すべてのRouteで共有する`Shared.Model`/`Shared.Msg`を保持
+  - ダークモードなどグローバルな状態を管理し、各Routeの`init`に注入
+- **ドメイン層 (`src/Pokemon/*`, `src/WeightedRandom.elm` など)**
+  - ポケモンデータ、技データ、特性データなどを型安全に提供
+  - 複雑なロジック（実数値計算、重み付きランダム選択、BattleKata生成）を純粋関数で実装
+- **データ供給層 (`scripts/*`, `public/data/*`)**
+  - スクリプトで外部ソースからJSON化→Elmコード生成を行い、`src/Pokemon/Data.elm`等に変換
+  - 生成物は`public/data`にも保持し、バックエンドタスクや将来の再生成に備える
+
+### テストレイヤー
+- **ユニットテスト (`tests/*`)**
+  - 各モジュールの純粋関数に対して仕様ベースでExpectを記述
+  - 匿名関数禁止・パイプ演算子禁止などリポジトリ規約に従う
+- **統合テスト**
+  - `tests/SpeedQuizIntegrationTest.elm`などでWeightedRandomとクイズロジックを結合して検証
+  - 実際の使用率データと計算ロジックの整合性を確認
 
 ### ルーティングシステム
 Elm Pagesは規約ベースのルーティングを採用：
