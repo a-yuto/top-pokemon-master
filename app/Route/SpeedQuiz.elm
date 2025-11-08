@@ -310,8 +310,7 @@ viewQuizArea model =
     case model.currentQuestion of
         Just question ->
             Html.div [ Attr.class "quiz-area" ]
-                [ Html.div [] [ Html.text ("DEBUG: showResult=" ++ (if model.showResult then "True" else "False") ++ ", previousQuestion=" ++ (if model.previousQuestion == Nothing then "Nothing" else "Just") ++ ", lastResult=" ++ (if model.lastResult == Nothing then "Nothing" else "Just") ++ ", isWaitingForNext=" ++ (if model.isWaitingForNext then "True" else "False")) ]
-                , viewPokemonBattle question model
+                [ viewPokemonBattle question model
                 , viewResult model.previousQuestion model
                 ]
 
