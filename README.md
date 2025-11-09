@@ -15,6 +15,11 @@ Elm Pages フレームワークを使った静的サイトジェネレーター�
 - 本番ビルド: `npm run build` を実行すると `dist/` に成果物が生成されます。
 - テスト実行: `npm test` で Elm のユニットテストおよび統合テストを実行します。変更を完了とする前にテストと静的解析がすべて通っていることを確認してください。
 
+## Cloudflare Pages へのデプロイ
+- GitHub 等のリポジトリを Cloudflare Pages に接続し、`main` ブランチを自動デプロイ対象に設定します。
+- Build command は `npm run build`、Output directory は `dist` を指定します。
+- 詳細な手順や必要な環境変数は `docs/deploy-cloudflare.md` を参照してください。
+
 ## 開発時の補足
 - Elm の静的解析結果を確認し、警告やエラーを解消してから動作確認を行ってください。
 - データ取得が必要な場合は `custom-backend-task.ts` にカスタム BackendTask を定義できます。

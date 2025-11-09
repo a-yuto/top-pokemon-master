@@ -1,4 +1,14 @@
-module Route.SpeedQuiz exposing (ActionData, Data, Model, Msg, route, shouldRevealRealStats)
+module Route.SpeedQuiz exposing
+    ( ActionData
+    , Data
+    , Model
+    , Msg
+    , route
+    , shouldRevealRealStats
+    , getPokemonFromKata
+    , getDefaultPokemon
+    , getArrayElementSafely
+    )
 
 import Array
 import BackendTask exposing (BackendTask)

@@ -13,6 +13,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - **匿名関数の使用を避ける** - 代わりに名前付きヘルパー関数を定義
 - **可読性を重視** - コードの意図を明確にする名前付き関数を優先
 - 作業中はtemp.mdのドキュメントに作業メモを残すこと。
+- スマホでの動作を仮定すること。
 
 ### 悪い例
 ```elm
@@ -143,7 +144,7 @@ Elm Pagesは規約ベースのルーティングを採用：
   - 横軸に素早さ値、同速のポケモンは縦方向にずらして表示
   - 各ポケモン名と実数値を表示
 - **ポケモン検索** (`/search`) - `app/Route/Search.elm`
-- **ポケモン図鑑一覧** (`/pokedex`) - `app/Route/Pokedex/Index.elm`
+- **ポケモン図鑑一覧** (`/pokedex`) - `app/Route/Pokedex.elm`
 - **個別ポケモン詳細** (`/pokedex/:id`) - `app/Route/Pokedex/Id_.elm`
 - **挨拶ページ** (`/greet`) - `app/Route/Greet.elm`
 
@@ -373,9 +374,7 @@ Expect.equal True isInValidRange
 ```
 
 ### 既知の問題
-- **実数値クイズモードの問題**: speed-quizページで実数値が表示されクイズになっていない（GitHub issue作成済み）
-  - 該当箇所: `app/Route/SpeedQuiz.elm`の389行目
-  - 修正対象: `viewBattleKataButton`関数
+- **現在ブロッカーになる既知の問題はありません**。speed-quizページの実数値表示タイミングは `app/Route/SpeedQuiz.elm` の `viewBattleKataButton`/`shouldRevealRealStats` で解答後のみ開示されるよう修正済みです。
 
 - ユーザーにlocalhostで確認するときは、pingでlocalhostにサーバーが建っていることを確認してからにしてください
 - タスクの完了はユニットテストがすべて通ること、静的解析が通ることは必要条件とします
