@@ -8,6 +8,12 @@ module Route.SpeedQuiz exposing
     , getPokemonFromKata
     , getDefaultPokemon
     , getArrayElementSafely
+    , calculateBaseSpeedDifference
+    , calculateBattleSpeedDifference
+    , selectClosestPokemonPair
+    , selectClosestBattleKataPair
+    , isBaseStatsSelectionCorrect
+    , isRealStatsSelectionCorrect
     )
 
 import Array
@@ -24,7 +30,7 @@ import PagesMsg exposing (PagesMsg)
 import Pokemon.Data exposing (findPokemonById)
 import Pokemon.Types exposing (Pokemon, PokemonType(..))
 import Pokemon.UsageData as UsageData
-import Pokemon.BattleTypes exposing (BattleKata, calculateRealStats, Nature(..), getNatureBonus, StatType(..))
+import Pokemon.BattleTypes exposing (BattleKata, calculateRealStats, Nature(..), getNatureBonus, StatType(..), initBattleKata)
 import WeightedRandom
 import Process
 import Random
@@ -151,10 +157,7 @@ update app shared msg model =
                         BaseStatsData pokemon1 pokemon2 ->
                             let
                                 isCorrect =
-                                    (selectedPokemon.id == pokemon1.id && pokemon1.stats.speed > pokemon2.stats.speed)
-                                        || (selectedPokemon.id == pokemon2.id && pokemon2.stats.speed > pokemon1.stats.speed)
-                                        || (selectedPokemon.id == pokemon1.id && pokemon1.stats.speed == pokemon2.stats.speed)
-                                        || (selectedPokemon.id == pokemon2.id && pokemon1.stats.speed == pokemon2.stats.speed)
+                                    isBaseStatsSelectionCorrect pokemon1 pokemon2 selectedPokemon.id
                             in
                             handleQuizResult model isCorrect
                         
@@ -170,16 +173,8 @@ update app shared msg model =
                     case question.questionData of
                         RealStatsData kata1 kata2 ->
                             let
-                                pokemon1 = getPokemonFromKata kata1
-                                pokemon2 = getPokemonFromKata kata2
-                                realStats1 = calculateRealStats kata1 pokemon1
-                                realStats2 = calculateRealStats kata2 pokemon2
-                                
                                 isCorrect =
-                                    (selectedKata.pokemonId == kata1.pokemonId && realStats1.speed > realStats2.speed)
-                                        || (selectedKata.pokemonId == kata2.pokemonId && realStats2.speed > realStats1.speed)
-                                        || (selectedKata.pokemonId == kata1.pokemonId && realStats1.speed == realStats2.speed)
-                                        || (selectedKata.pokemonId == kata2.pokemonId && realStats1.speed == realStats2.speed)
+                                    isRealStatsSelectionCorrect kata1 kata2 selectedKata.pokemonId
                             in
                             handleQuizResult model isCorrect
                         
@@ -432,8 +427,8 @@ viewBattleKataButton kata model =
 
                 Nothing ->
                     "持ち物補正: なし"
-        effortDescription = "努力値(素早さ): " ++ String.fromInt speedEffortValue
-        natureDescription = "性格補正: " ++ bonusText ++ "倍 (" ++ natureLabel ++ ")"
+        effortDescription = "努力値: " ++ String.fromInt speedEffortValue
+        natureDescription = "性格補正: " ++ bonusText ++ "倍"
         detailElements =
             [ Html.div [ Attr.class "pokemon-name" ] [ Html.text pokemon.name ]
             , Html.div [ Attr.class "kata-detail" ] [ Html.text effortDescription ]
@@ -562,6 +557,55 @@ handleQuizResult model isCorrect =
     )
 
 
+-- 同速時は「同じ速さ」ボタンのみ正解扱いとする
+isBaseStatsSelectionCorrect : Pokemon -> Pokemon -> Int -> Bool
+isBaseStatsSelectionCorrect pokemon1 pokemon2 selectedId =
+    let
+        speed1 = pokemon1.stats.speed
+        speed2 = pokemon2.stats.speed
+        speedsEqual = speed1 == speed2
+        firstIsFaster = speed1 > speed2
+        secondIsFaster = speed2 > speed1
+        selectedIsFirst = selectedId == pokemon1.id
+        selectedIsSecond = selectedId == pokemon2.id
+        selectsFirstWhenValid = firstIsFaster && selectedIsFirst
+        selectsSecondWhenValid = secondIsFaster && selectedIsSecond
+    in
+    if speedsEqual then
+        False
+    else if selectsFirstWhenValid then
+        True
+    else if selectsSecondWhenValid then
+        True
+    else
+        False
+
+
+isRealStatsSelectionCorrect : BattleKata -> BattleKata -> Int -> Bool
+isRealStatsSelectionCorrect kata1 kata2 selectedId =
+    let
+        pokemon1 = getPokemonFromKata kata1
+        pokemon2 = getPokemonFromKata kata2
+        realStats1 = calculateRealStats kata1 pokemon1
+        realStats2 = calculateRealStats kata2 pokemon2
+        speedsEqual = realStats1.speed == realStats2.speed
+        firstIsFaster = realStats1.speed > realStats2.speed
+        secondIsFaster = realStats2.speed > realStats1.speed
+        selectedIsFirst = selectedId == kata1.pokemonId
+        selectedIsSecond = selectedId == kata2.pokemonId
+        selectsFirstWhenValid = firstIsFaster && selectedIsFirst
+        selectsSecondWhenValid = secondIsFaster && selectedIsSecond
+    in
+    if speedsEqual then
+        False
+    else if selectsFirstWhenValid then
+        True
+    else if selectsSecondWhenValid then
+        True
+    else
+        False
+
+
 isSpeedEqual : Question -> Bool
 isSpeedEqual question =
     case question.questionData of
@@ -633,10 +677,34 @@ generateRandomQuestion : QuizMode -> Random.Generator Question
 generateRandomQuestion mode =
     case mode of
         BaseStatsMode ->
-            Random.map (convertPairToQuestion mode) WeightedRandom.generateWeightedPokemonPair
+            Random.map
+                (\pairs ->
+                    let
+                        maybePair = selectClosestPokemonPair pairs
+                    in
+                    case maybePair of
+                        Just pair ->
+                            convertPairToQuestion mode pair
+
+                        Nothing ->
+                            convertPairToQuestion mode getTopPokemonPair
+                )
+                (Random.list questionSampleCount WeightedRandom.generateWeightedPokemonPair)
 
         RealStatsMode ->
-            Random.map (convertBattleKataPairToQuestion mode) WeightedRandom.generateWeightedBattleKataPair
+            Random.map
+                (\pairs ->
+                    let
+                        maybePair = selectClosestBattleKataPair pairs
+                    in
+                    case maybePair of
+                        Just pair ->
+                            convertBattleKataPairToQuestion mode pair
+
+                        Nothing ->
+                            convertBattleKataPairToQuestion mode getDefaultBattleKataPair
+                )
+                (Random.list questionSampleCount WeightedRandom.generateWeightedBattleKataPair)
 
 
 convertPairToQuestion : QuizMode -> (Pokemon, Pokemon) -> Question
@@ -651,3 +719,107 @@ convertBattleKataPairToQuestion mode (kata1, kata2) =
     { mode = mode
     , questionData = RealStatsData kata1 kata2
     }
+
+
+questionSampleCount : Int
+questionSampleCount =
+    5
+
+
+selectClosestPokemonPair : List ( Pokemon, Pokemon ) -> Maybe ( Pokemon, Pokemon )
+selectClosestPokemonPair pairs =
+    selectClosestPair calculateBaseSpeedDifference pairs
+
+
+selectClosestBattleKataPair : List ( BattleKata, BattleKata ) -> Maybe ( BattleKata, BattleKata )
+selectClosestBattleKataPair pairs =
+    selectClosestPair calculateBattleSpeedDifference pairs
+
+
+selectClosestPair :
+    (a -> a -> Float)
+    -> List ( a, a )
+    -> Maybe ( a, a )
+selectClosestPair differenceFunction pairs =
+    case pairs of
+        [] ->
+            Nothing
+
+        first :: rest ->
+            Just (List.foldl (chooseCloserPair differenceFunction) first rest)
+
+
+chooseCloserPair :
+    (a -> a -> Float)
+    -> ( a, a )
+    -> ( a, a )
+    -> ( a, a )
+chooseCloserPair differenceFunction candidate currentBest =
+    let
+        ( candidateFirst, candidateSecond ) = candidate
+        ( bestFirst, bestSecond ) = currentBest
+        candidateDifference = differenceFunction candidateFirst candidateSecond
+        bestDifference = differenceFunction bestFirst bestSecond
+    in
+    if candidateDifference < bestDifference then
+        candidate
+    else
+        currentBest
+
+
+calculateBaseSpeedDifference : Pokemon -> Pokemon -> Float
+calculateBaseSpeedDifference pokemon1 pokemon2 =
+    calculateRelativeDifference
+        (toFloat pokemon1.stats.speed)
+        (toFloat pokemon2.stats.speed)
+
+
+calculateBattleSpeedDifference : BattleKata -> BattleKata -> Float
+calculateBattleSpeedDifference kata1 kata2 =
+    let
+        pokemon1 = getPokemonFromKata kata1
+        pokemon2 = getPokemonFromKata kata2
+        realStats1 = calculateRealStats kata1 pokemon1
+        realStats2 = calculateRealStats kata2 pokemon2
+    in
+    calculateRelativeDifference
+        (toFloat realStats1.speed)
+        (toFloat realStats2.speed)
+
+
+calculateRelativeDifference : Float -> Float -> Float
+calculateRelativeDifference value1 value2 =
+    let
+        numerator = abs (value1 - value2)
+        denominator = value1 + value2
+    in
+    if denominator == 0 then
+        0
+    else
+        numerator / denominator
+
+
+getTopPokemonPair : ( Pokemon, Pokemon )
+getTopPokemonPair =
+    let
+        pokemonArray = Array.fromList UsageData.selectTop150Pokemon
+        firstPokemon = getDefaultPokemon pokemonArray
+        secondPokemon =
+            case Array.get 1 pokemonArray of
+                Just pokemon ->
+                    pokemon
+
+                Nothing ->
+                    firstPokemon
+    in
+    ( firstPokemon, secondPokemon )
+
+
+getDefaultBattleKataPair : ( BattleKata, BattleKata )
+getDefaultBattleKataPair =
+    let
+        ( pokemon1, pokemon2 ) = getTopPokemonPair
+        kata1 = initBattleKata pokemon1.id
+        kata2 = initBattleKata pokemon2.id
+    in
+    ( kata1, kata2 )

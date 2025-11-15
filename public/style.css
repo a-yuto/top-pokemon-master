@@ -379,13 +379,38 @@ body {
     font-size: 2em;
   }
 
+  .vs-text {
+    font-size: 1.5em;
+  }
+
   .pokemon-button {
     width: 100%;
     max-width: 200px;
+    font-size: 1.15em;
+    padding: 14px 18px;
+    line-height: 1.2;
   }
 
-  .vs-text {
-    font-size: 1.5em;
+  .same-speed-button {
+    font-size: 1em;
+    padding: 12px 18px;
+  }
+
+  .score-display {
+    font-size: 1em;
+    padding: 8px 14px;
+  }
+
+  .result-icon {
+    font-size: 3.5em;
+  }
+
+  .result-message {
+    font-size: 1.6em;
+  }
+
+  .speed-values {
+    font-size: 1.05em;
   }
 }
 
